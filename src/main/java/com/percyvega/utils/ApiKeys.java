@@ -1,4 +1,4 @@
-package com.percyvega;
+package com.percyvega.utils;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
