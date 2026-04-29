@@ -1,4 +1,4 @@
-package com.percyvega.plain;
+package com.percyvega.raw;
 
 public interface AiHelper {
 

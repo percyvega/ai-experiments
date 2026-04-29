@@ -1,23 +1,26 @@
-package com.percyvega.plain.impl;
+package com.percyvega.raw.impl;
 
-import com.percyvega.plain.AbstractAiHelper;
-import com.percyvega.plain.AiHelper;
+import com.percyvega.raw.AbstractAiHelper;
+import com.percyvega.raw.AiHelper;
+import com.percyvega.utils.ApiKeys;
 
 import java.net.URI;
 import java.net.http.HttpRequest;
 
-public final class OllamaHelperImpl extends AbstractAiHelper {
+public final class AnthropicHelperImpl extends AbstractAiHelper {
 
-    public static final AiHelper INSTANCE = new OllamaHelperImpl();
+    public static final AiHelper INSTANCE = new AnthropicHelperImpl();
 
-    private OllamaHelperImpl() {
+    private AnthropicHelperImpl() {
     }
 
     @Override
     protected HttpRequest getHttpRequest(String prompt) {
         return HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:11434/v1/chat/completions"))
+                .uri(URI.create("https://api.anthropic.com/v1/messages"))
                 .header("Content-Type", "application/json")
+                .header("x-api-key", ApiKeys.anthropic())
+                .header("anthropic-version", "2023-06-01")
                 .POST(HttpRequest.BodyPublishers.ofString(getBody(prompt)))
                 .build();
     }
@@ -26,7 +29,8 @@ public final class OllamaHelperImpl extends AbstractAiHelper {
     protected String getBody(String prompt) {
         return """
                 {
-                    "model": "qwen3:4b",
+                    "model": "claude-sonnet-4-6",
+                    "max_tokens": 1024,
                     "messages": [
                         {
                             "role": "user",
@@ -36,5 +40,4 @@ public final class OllamaHelperImpl extends AbstractAiHelper {
                 }
                 """.formatted(prompt);
     }
-
 }

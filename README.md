@@ -1,11 +1,14 @@
 # ai-experiments
 
-A personal sandbox for calling LLM provider HTTP APIs directly from Java — no SDKs, just `java.net.http.HttpClient` and Jackson.
+A personal sandbox for calling LLM providers from Java, in two flavors:
+
+- **`raw`** — direct HTTP via `java.net.http.HttpClient` and Jackson, no SDK.
+- **`langchain4j`** — the same providers wrapped through [LangChain4j](https://docs.langchain4j.dev/).
 
 Currently supports:
 
-- OpenAI (`gpt-4`)
-- Anthropic (`claude-sonnet-4-6`)
+- OpenAI (`gpt-4.1-mini`)
+- Anthropic (Claude Sonnet 4.x — model IDs are pinned in `ChatModelFactory` and each `*HelperImpl`)
 - Google (`gemini-2.5-flash`)
 - Ollama (`qwen3:4b`, local)
 
@@ -30,28 +33,29 @@ Ollama needs no key.
 
 ## Run
 
-`Main` uses the JEP 512 instance `void main()` form. Pick a provider by uncommenting a line in [`Main.java`](src/main/java/com/percyvega/plain/Main.java), then run from your IDE, or:
+There is no `Main` — experiments are driven by JUnit tests:
 
 ```sh
-mvn compile
-mvn exec:java -Dexec.mainClass=com.percyvega.plain.Main
+mvn test
 ```
 
-Example (Ollama):
+Tests run **in parallel** (configured in `src/test/resources/junit-platform.properties`), so the four provider methods inside each test class fan out concurrently.
 
-```
-2026-04-26 21:41:23.893 [main] INFO  Status: 200
-2026-04-26 21:41:45.... [main] INFO  Time: 22 sec
-2026-04-26 21:41:45.... [main] INFO
-{
-  "id" : "...",
-  "choices" : [ { "message" : { "content" : "..." } } ]
-}
+Test classes:
+
+- `raw/RawTest` — exercises each `*HelperImpl.INSTANCE` (raw HTTP) and pretty-prints the JSON response.
+- `langchain4j/UserMessageTest` — single-string prompt against each `ChatModelFactory.getX()`.
+- `langchain4j/UserAndSystemMessagesTest` — `SystemMessage` + `UserMessage` list against each `ChatModel`.
+
+Run a single class from your IDE, or:
+
+```sh
+mvn test -Dtest=UserMessageTest
 ```
 
 ## Architecture
 
-The `plain` package is a small template-method hierarchy:
+### `raw` — template-method hierarchy
 
 - `AiHelper` — public interface, exposes only `getResponseFromPrompt(String)`.
 - `AbstractAiHelper` — shared `HttpClient` + Jackson + `StopWatch` plumbing; declares `protected abstract getHttpRequest(...)` and `getBody(...)`.
@@ -59,10 +63,6 @@ The `plain` package is a small template-method hierarchy:
 
 Adding a new provider: extend `AbstractAiHelper`, override the two `protected` methods, expose an `AiHelper INSTANCE`.
 
-## Tests
+### `langchain4j` — factory of `ChatModel`s
 
-```sh
-mvn test
-```
-
-(Currently just a placeholder.)
+- `ChatModelFactory` — static `getAnthropic()` / `getOpenAi()` / `getGoogle()` / `getOllama()` returning a fresh LangChain4j `ChatModel`. Models, temperatures, and timeouts are hard-coded; tweak them here.

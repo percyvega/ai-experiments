@@ -2,7 +2,14 @@
   "permissions": {
     "allow": [
       "Bash(xargs ls *)",
-      "Bash(mvn -q compile)"
+      "Bash(mvn -q compile)",
+      "Bash(curl -s \"https://search.maven.org/solrsearch/select?q=g:dev.langchain4j+AND+a:langchain4j-bom&rows=20&wt=json\")",
+      "Bash(python3 -c \"import sys, json; data = json.load\\(sys.stdin\\); print\\('latest:', data['response']['docs'][0].get\\('latestVersion'\\)\\)\")",
+      "Bash(curl *)",
+      "Bash(mvn -q dependency:resolve -DincludeArtifactIds=langchain4j)",
+      "Bash(mvn -q dependency:resolve)",
+      "Bash(mvn -q test-compile)",
+      "Bash(xargs -I {} unzip -p {} dev/langchain4j/model/anthropic/AnthropicChatModelName.class)"
     ]
   }
 }

@@ -1,26 +1,25 @@
-package com.percyvega.plain.impl;
+package com.percyvega.raw.impl;
 
-import com.percyvega.plain.AbstractAiHelper;
-import com.percyvega.plain.AiHelper;
+import com.percyvega.raw.AbstractAiHelper;
+import com.percyvega.raw.AiHelper;
 import com.percyvega.utils.ApiKeys;
 
 import java.net.URI;
 import java.net.http.HttpRequest;
 
-public final class AnthropicHelperImpl extends AbstractAiHelper {
+public final class OpenAiHelperImpl extends AbstractAiHelper {
 
-    public static final AiHelper INSTANCE = new AnthropicHelperImpl();
+    public static final AiHelper INSTANCE = new OpenAiHelperImpl();
 
-    private AnthropicHelperImpl() {
+    private OpenAiHelperImpl() {
     }
 
     @Override
     protected HttpRequest getHttpRequest(String prompt) {
         return HttpRequest.newBuilder()
-                .uri(URI.create("https://api.anthropic.com/v1/messages"))
+                .uri(URI.create("https://api.openai.com/v1/chat/completions"))
                 .header("Content-Type", "application/json")
-                .header("x-api-key", ApiKeys.anthropic())
-                .header("anthropic-version", "2023-06-01")
+                .header("Authorization", "Bearer " + ApiKeys.openAI())
                 .POST(HttpRequest.BodyPublishers.ofString(getBody(prompt)))
                 .build();
     }
@@ -29,8 +28,7 @@ public final class AnthropicHelperImpl extends AbstractAiHelper {
     protected String getBody(String prompt) {
         return """
                 {
-                    "model": "claude-sonnet-4-6",
-                    "max_tokens": 1024,
+                    "model": "gpt-4",
                     "messages": [
                         {
                             "role": "user",
@@ -40,4 +38,5 @@ public final class AnthropicHelperImpl extends AbstractAiHelper {
                 }
                 """.formatted(prompt);
     }
+
 }

@@ -1,25 +1,23 @@
-package com.percyvega.plain.impl;
+package com.percyvega.raw.impl;
 
-import com.percyvega.plain.AbstractAiHelper;
-import com.percyvega.plain.AiHelper;
-import com.percyvega.utils.ApiKeys;
+import com.percyvega.raw.AbstractAiHelper;
+import com.percyvega.raw.AiHelper;
 
 import java.net.URI;
 import java.net.http.HttpRequest;
 
-public final class OpenAiHelperImpl extends AbstractAiHelper {
+public final class OllamaHelperImpl extends AbstractAiHelper {
 
-    public static final AiHelper INSTANCE = new OpenAiHelperImpl();
+    public static final AiHelper INSTANCE = new OllamaHelperImpl();
 
-    private OpenAiHelperImpl() {
+    private OllamaHelperImpl() {
     }
 
     @Override
     protected HttpRequest getHttpRequest(String prompt) {
         return HttpRequest.newBuilder()
-                .uri(URI.create("https://api.openai.com/v1/chat/completions"))
+                .uri(URI.create("http://localhost:11434/v1/chat/completions"))
                 .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + ApiKeys.openAI())
                 .POST(HttpRequest.BodyPublishers.ofString(getBody(prompt)))
                 .build();
     }
@@ -28,7 +26,7 @@ public final class OpenAiHelperImpl extends AbstractAiHelper {
     protected String getBody(String prompt) {
         return """
                 {
-                    "model": "gpt-4",
+                    "model": "qwen3:4b",
                     "messages": [
                         {
                             "role": "user",

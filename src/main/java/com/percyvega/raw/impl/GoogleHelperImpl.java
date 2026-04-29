@@ -1,7 +1,7 @@
-package com.percyvega.plain.impl;
+package com.percyvega.raw.impl;
 
-import com.percyvega.plain.AbstractAiHelper;
-import com.percyvega.plain.AiHelper;
+import com.percyvega.raw.AbstractAiHelper;
+import com.percyvega.raw.AiHelper;
 import com.percyvega.utils.ApiKeys;
 
 import java.net.URI;
