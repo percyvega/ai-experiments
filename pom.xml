@@ -30,6 +30,8 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <!-- langchain4j: -->
             <dependency>
                 <groupId>dev.langchain4j</groupId>
                 <artifactId>langchain4j-bom</artifactId>
@@ -37,6 +39,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <!-- :langchain4j -->
         </dependencies>
     </dependencyManagement>
 
@@ -63,6 +66,8 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.20.0</version>
         </dependency>
+
+        <!-- langchain4j: -->
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j</artifactId>
@@ -83,6 +88,8 @@
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-open-ai</artifactId>
         </dependency>
+        <!-- :langchain4j -->
+
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>

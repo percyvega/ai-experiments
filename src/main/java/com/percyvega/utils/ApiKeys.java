@@ -19,6 +19,7 @@ public final class ApiKeys {
         return fromKeychain("GOOGLE_API_KEY");
     }
 
+    // e.g. $ security find-generic-password -a "$USER" -s ANTHROPIC_API_KEY
     private static String fromKeychain(String service) {
         try {
             return new String(new ProcessBuilder("security", "find-generic-password",
