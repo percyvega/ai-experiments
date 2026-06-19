@@ -49,7 +49,7 @@ public abstract class ChatModelFactory {
     public static ChatModel getOllama() {
         return OllamaChatModel.builder()
                 .baseUrl("http://localhost:11434")
-                .modelName("qwen3:4b")
+                .modelName("mistral-small3.2")
                 .temperature(1.0)
                 .timeout(Duration.ofSeconds(300))
                 .build();

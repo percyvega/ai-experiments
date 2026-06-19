@@ -12,7 +12,7 @@ class T1UserMessageTest {
 
     private static final Logger log = LogManager.getLogger(T1UserMessageTest.class);
 
-    private static final String PROMPT = "When is the U.S. Independence Day?";
+    private static final String PROMPT = "When is U.S. Independence Day?";
 
     @Test
     @Order(1)
@@ -22,14 +22,14 @@ class T1UserMessageTest {
 
     @Test
     @Order(2)
-    void anthropic() {
-        logResponse(ChatModelFactory.getAnthropic().chat(PROMPT));
+    void google() {
+        logResponse(ChatModelFactory.getGoogle().chat(PROMPT));
     }
 
     @Test
     @Order(3)
-    void google() {
-        logResponse(ChatModelFactory.getGoogle().chat(PROMPT));
+    void anthropic() {
+        logResponse(ChatModelFactory.getAnthropic().chat(PROMPT));
     }
 
     @Test

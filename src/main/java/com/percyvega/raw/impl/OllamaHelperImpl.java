@@ -26,7 +26,7 @@ public final class OllamaHelperImpl extends AbstractAiHelper {
     protected String getBody(String prompt) {
         return """
                 {
-                    "model": "qwen3:4b",
+                    "model": "mistral-small3.2",
                     "messages": [
                         {
                             "role": "user",
@@ -37,4 +37,8 @@ public final class OllamaHelperImpl extends AbstractAiHelper {
                 """.formatted(prompt);
     }
 
+    @Override
+    public String getPromptResponsePath() {
+        return "/choices/0/message/content";
+    }
 }

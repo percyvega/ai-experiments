@@ -20,13 +20,13 @@ public final class ApiKeys {
     }
 
     // e.g. $ security find-generic-password -a "$USER" -s ANTHROPIC_API_KEY
-    private static String fromKeychain(String service) {
+    private static String fromKeychain(String keyName) {
         try {
             return new String(new ProcessBuilder("security", "find-generic-password",
-                    "-a", System.getProperty("user.name"), "-s", service, "-w")
+                    "-a", System.getProperty("user.name"), "-s", keyName, "-w")
                     .start().getInputStream().readAllBytes()).trim();
         } catch (IOException e) {
-            throw new UncheckedIOException("Failed to read " + service + " from keychain", e);
+            throw new UncheckedIOException("Failed to read " + keyName + " from keychain", e);
         }
     }
 }

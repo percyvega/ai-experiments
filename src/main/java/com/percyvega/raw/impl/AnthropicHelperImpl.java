@@ -40,4 +40,9 @@ public final class AnthropicHelperImpl extends AbstractAiHelper {
                 }
                 """.formatted(prompt);
     }
+
+    @Override
+    public String getPromptResponsePath() {
+        return "/content/0/text";
+    }
 }

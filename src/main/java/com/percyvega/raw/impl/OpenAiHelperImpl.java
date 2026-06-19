@@ -39,4 +39,8 @@ public final class OpenAiHelperImpl extends AbstractAiHelper {
                 """.formatted(prompt);
     }
 
+    @Override
+    public String getPromptResponsePath() {
+        return "/choices/0/message/content";
+    }
 }

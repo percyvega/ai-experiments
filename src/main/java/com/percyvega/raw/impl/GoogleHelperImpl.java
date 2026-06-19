@@ -38,4 +38,9 @@ public final class GoogleHelperImpl extends AbstractAiHelper {
                 }
                 """.formatted(prompt);
     }
+
+    @Override
+    public String getPromptResponsePath() {
+        return "/candidates/0/content/parts/0/text";
+    }
 }

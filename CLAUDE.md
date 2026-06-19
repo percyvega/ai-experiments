@@ -45,4 +45,7 @@ Logging in tests goes through `src/main/resources/log4j2.xml` (Maven puts main r
 
 ## API keys
 
-`com.percyvega.utils.ApiKeys` reads keys from the **macOS keychain** by shelling out to `security find-generic-password`. Service names: `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `GOOGLE_API_KEY`. This is macOS-only — there is no env-var or `.env` fallback. Ollama is local (`http://localhost:11434`) and needs no key. To add a new provider key, add a method to `ApiKeys` and store it in keychain via `security add-generic-password -a "$USER" -s NEW_KEY_NAME -w <key>`.
+- `com.percyvega.utils.ApiKeys` reads keys from the **macOS keychain** by shelling out to `security find-generic-password`.
+- Service names: `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `GOOGLE_API_KEY`. This is macOS-only — there is no env-var or `.env` fallback.
+- Ollama is local (`http://localhost:11434`) and needs no key.
+- To add a new provider key, add a method to `ApiKeys` and store it in keychain via `security add-generic-password -a "$USER" -s NEW_KEY_NAME -w <key>`.

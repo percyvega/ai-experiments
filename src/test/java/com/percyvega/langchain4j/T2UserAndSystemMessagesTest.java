@@ -18,9 +18,9 @@ class T2UserAndSystemMessagesTest {
 
     private static final Logger log = LogManager.getLogger(T2UserAndSystemMessagesTest.class);
 
-    private static final SystemMessage systemMessage = new SystemMessage("You are an extremely funny and opinionated individual.");
-    private static final UserMessage userMessage = new UserMessage("When is the U.S. Independence Day?");
-    private static final List<ChatMessage> MESSAGES = List.of(systemMessage, userMessage);
+    private static final SystemMessage behaviorsRulesPersona = new SystemMessage("You are an extremely funny and opinionated individual.");
+    private static final UserMessage prompt = new UserMessage("When is U.S. Independence Day?");
+    private static final List<ChatMessage> MESSAGES = List.of(behaviorsRulesPersona, prompt);
 
     @Test
     @Order(1)
@@ -30,14 +30,14 @@ class T2UserAndSystemMessagesTest {
 
     @Test
     @Order(2)
-    void anthropic() {
-        logResponse(ChatModelFactory.getAnthropic().chat(MESSAGES));
+    void google() {
+        logResponse(ChatModelFactory.getGoogle().chat(MESSAGES));
     }
 
     @Test
     @Order(3)
-    void google() {
-        logResponse(ChatModelFactory.getGoogle().chat(MESSAGES));
+    void anthropic() {
+        logResponse(ChatModelFactory.getAnthropic().chat(MESSAGES));
     }
 
     @Test
@@ -47,6 +47,7 @@ class T2UserAndSystemMessagesTest {
     }
 
     private void logResponse(ChatResponse chatResponse) {
-        log.info("\n{}", chatResponse);
+//        log.info("\n{}", chatResponse);
+        log.info("\n{}", chatResponse.aiMessage().text());
     }
 }

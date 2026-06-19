@@ -17,4 +17,12 @@ public abstract class Utils {
             throw new RuntimeException(e);
         }
     }
+
+    public static String getValue(String json, String jsonPointer) {
+        try {
+            return MAPPER.readTree(json).at(jsonPointer).asText();
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
