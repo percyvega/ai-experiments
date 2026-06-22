@@ -1,15 +1,20 @@
 package com.percyvega.raw.impl;
 
-import com.percyvega.raw.AbstractAiHelper;
-import com.percyvega.raw.AiHelper;
+import com.percyvega.raw.AbstractModelHelper;
+import com.percyvega.raw.ModelHelper;
 import com.percyvega.utils.ApiKeys;
 
 import java.net.URI;
 import java.net.http.HttpRequest;
 
-public final class OpenAiHelperImpl extends AbstractAiHelper {
+import static com.percyvega.utils.Constants.MAX_TOKENS;
+import static com.percyvega.utils.Constants.OPENAI_AI_MODEL_NAME;
+import static com.percyvega.utils.Constants.SYSTEM_MESSAGE_TEXT;
+import static com.percyvega.utils.Constants.TEMPERATURE;
 
-    public static final AiHelper INSTANCE = new OpenAiHelperImpl();
+public final class OpenAiHelperImpl extends AbstractModelHelper {
+
+    public static final ModelHelper INSTANCE = new OpenAiHelperImpl();
 
     private OpenAiHelperImpl() {
     }
@@ -28,15 +33,21 @@ public final class OpenAiHelperImpl extends AbstractAiHelper {
     protected String getBody(String prompt) {
         return """
                 {
-                    "model": "gpt-4",
+                    "model": "%s",
+                    "max_completion_tokens": %d,
+                    "temperature": %s,
                     "messages": [
+                        {
+                            "role": "system",
+                            "content": "%s"
+                        },
                         {
                             "role": "user",
                             "content": "%s"
                         }
                     ]
                 }
-                """.formatted(prompt);
+                """.formatted(OPENAI_AI_MODEL_NAME, MAX_TOKENS, TEMPERATURE, SYSTEM_MESSAGE_TEXT, prompt);
     }
 
     @Override

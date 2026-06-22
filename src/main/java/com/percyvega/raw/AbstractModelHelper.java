@@ -7,8 +7,11 @@ import java.io.IOException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Duration;
 
-public abstract class AbstractAiHelper implements AiHelper {
+import static com.percyvega.utils.Constants.TIMEOUT_SECONDS;
+
+public abstract class AbstractModelHelper implements ModelHelper {
 
     @Override
     public final String getModelResponse(String prompt) {
@@ -23,7 +26,9 @@ public abstract class AbstractAiHelper implements AiHelper {
     protected abstract String getPromptResponsePath();
 
     private String getHttpResponse(HttpRequest httpRequest) {
-        try (HttpClient client = HttpClient.newHttpClient()) {
+        try (HttpClient client = HttpClient.newBuilder()
+                .connectTimeout(Duration.ofSeconds(TIMEOUT_SECONDS))
+                .build()) {
             try {
                 HttpResponse<String> httpResponse = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 

@@ -7,35 +7,35 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import static com.percyvega.utils.Constants.USER_MESSAGE_TEXT;
+
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class T1UserMessageTest {
 
     private static final Logger log = LogManager.getLogger(T1UserMessageTest.class);
 
-    private static final String PROMPT = "When is U.S. Independence Day?";
-
     @Test
     @Order(1)
-    void openAi() {
-        logResponse(ChatModelFactory.getOpenAi().chat(PROMPT));
+    void anthropic() {
+        logResponse(ChatModelFactory.getAnthropic().chat(USER_MESSAGE_TEXT));
     }
 
     @Test
     @Order(2)
     void google() {
-        logResponse(ChatModelFactory.getGoogle().chat(PROMPT));
+        logResponse(ChatModelFactory.getGoogle().chat(USER_MESSAGE_TEXT));
     }
 
     @Test
     @Order(3)
-    void anthropic() {
-        logResponse(ChatModelFactory.getAnthropic().chat(PROMPT));
+    void openAi() {
+        logResponse(ChatModelFactory.getOpenAi().chat(USER_MESSAGE_TEXT));
     }
 
     @Test
     @Order(4)
     void ollama() {
-        logResponse(ChatModelFactory.getOllama().chat(PROMPT));
+        logResponse(ChatModelFactory.getOllama().chat(USER_MESSAGE_TEXT));
     }
 
     private void logResponse(String response) {

@@ -11,16 +11,18 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import static com.percyvega.utils.Constants.USER_MESSAGE_TEXT;
+import static com.percyvega.utils.Utils.formatAsJson;
+
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class RawTest {
 
     private static final Logger log = LogManager.getLogger(RawTest.class);
-    private static final String PROMPT = "When is U.S. Independence Day?";
 
     @Test
     @Order(1)
-    void openAi() {
-        logResponse(OpenAiHelperImpl.INSTANCE);
+    void anthropic() {
+        logResponse(AnthropicHelperImpl.INSTANCE);
     }
 
     @Test
@@ -31,8 +33,8 @@ class RawTest {
 
     @Test
     @Order(3)
-    void anthropic() {
-        logResponse(AnthropicHelperImpl.INSTANCE);
+    void openAi() {
+        logResponse(OpenAiHelperImpl.INSTANCE);
     }
 
     @Test
@@ -41,8 +43,8 @@ class RawTest {
         logResponse(OllamaHelperImpl.INSTANCE);
     }
 
-    private void logResponse(AiHelper aiHelper) {
-//        log.info("\n{}", formatAsJson(aiHelper.getModelResponse(PROMPT)));
-        log.info("\n{}", aiHelper.extractPromptResponse(aiHelper.getModelResponse(PROMPT)));
+    private void logResponse(ModelHelper modelHelper) {
+        log.info("\n{}", formatAsJson(modelHelper.getModelResponse(USER_MESSAGE_TEXT)));
+//        log.info("\n{}", modelHelper.extractPromptResponse(modelHelper.getModelResponse(USER_MESSAGE_TEXT)));
     }
 }

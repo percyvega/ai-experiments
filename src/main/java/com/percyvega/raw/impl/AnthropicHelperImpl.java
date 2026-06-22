@@ -1,15 +1,20 @@
 package com.percyvega.raw.impl;
 
-import com.percyvega.raw.AbstractAiHelper;
-import com.percyvega.raw.AiHelper;
+import com.percyvega.raw.AbstractModelHelper;
+import com.percyvega.raw.ModelHelper;
 import com.percyvega.utils.ApiKeys;
 
 import java.net.URI;
 import java.net.http.HttpRequest;
 
-public final class AnthropicHelperImpl extends AbstractAiHelper {
+import static com.percyvega.utils.Constants.ANTHROPIC_MODEL_NAME;
+import static com.percyvega.utils.Constants.MAX_TOKENS;
+import static com.percyvega.utils.Constants.SYSTEM_MESSAGE_TEXT;
+import static com.percyvega.utils.Constants.TEMPERATURE;
 
-    public static final AiHelper INSTANCE = new AnthropicHelperImpl();
+public final class AnthropicHelperImpl extends AbstractModelHelper {
+
+    public static final ModelHelper INSTANCE = new AnthropicHelperImpl();
 
     private AnthropicHelperImpl() {
     }
@@ -29,8 +34,10 @@ public final class AnthropicHelperImpl extends AbstractAiHelper {
     protected String getBody(String prompt) {
         return """
                 {
-                    "model": "claude-sonnet-4-6",
-                    "max_tokens": 1024,
+                    "model": "%s",
+                    "max_tokens": %d,
+                    "temperature": %s,
+                    "system": "%s",
                     "messages": [
                         {
                             "role": "user",
@@ -38,7 +45,7 @@ public final class AnthropicHelperImpl extends AbstractAiHelper {
                         }
                     ]
                 }
-                """.formatted(prompt);
+                """.formatted(ANTHROPIC_MODEL_NAME, MAX_TOKENS, TEMPERATURE / 2, SYSTEM_MESSAGE_TEXT, prompt);
     }
 
     @Override

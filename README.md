@@ -57,11 +57,11 @@ mvn test -Dtest=UserMessageTest
 
 ### `raw` — template-method hierarchy
 
-- `AiHelper` — public interface, exposes only `getResponseFromPrompt(String)`.
-- `AbstractAiHelper` — shared `HttpClient` + Jackson + `StopWatch` plumbing; declares `protected abstract getHttpRequest(...)` and `getBody(...)`.
-- `impl/*HelperImpl` — one `final class` per provider, exposing `public static final AiHelper INSTANCE`.
+- `ModelHelper` — public interface, exposes only `getResponseFromPrompt(String)`.
+- `AbstractModelHelper` — shared `HttpClient` + Jackson + `StopWatch` plumbing; declares `protected abstract getHttpRequest(...)` and `getBody(...)`.
+- `impl/*HelperImpl` — one `final class` per provider, exposing `public static final ModelHelper INSTANCE`.
 
-Adding a new provider: extend `AbstractAiHelper`, override the two `protected` methods, expose an `AiHelper INSTANCE`.
+Adding a new provider: extend `AbstractModelHelper`, override the two `protected` methods, expose an `ModelHelper INSTANCE`.
 
 ### `langchain4j` — factory of `ChatModel`s
 
