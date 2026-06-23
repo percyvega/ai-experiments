@@ -5,7 +5,8 @@ import java.io.UncheckedIOException;
 
 public final class ApiKeys {
 
-    private ApiKeys() {}
+    private ApiKeys() {
+    }
 
     public static String openAI() {
         return fromKeychain("OPENAI_API_KEY");

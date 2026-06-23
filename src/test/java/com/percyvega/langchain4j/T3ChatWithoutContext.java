@@ -13,19 +13,17 @@ import static com.percyvega.utils.Constants.SYSTEM_MESSAGE_TEXT;
 
 class T3ChatWithoutContext {
 
-    public static final ChatModel CHAT_MODEL = ChatModelFactory.getOpenAi();
+    public static final ChatModel CHAT_MODEL = ChatModelFactory.getGoogle();
     private static final SystemMessage SYSTEM_MESSAGE = new SystemMessage(SYSTEM_MESSAGE_TEXT);
 
     void main() {
-        System.out.println("Enter '/exit' to quit.");
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.print("Enter your prompt: ");
             String userInput = scanner.nextLine();
-            if ("/exit".equalsIgnoreCase(userInput)) {
-                break;
-            }
-            List<ChatMessage> messages = List.of(SYSTEM_MESSAGE, UserMessage.from(userInput));
+            UserMessage userMessage = UserMessage.from(userInput);
+
+            List<ChatMessage> messages = List.of(SYSTEM_MESSAGE, userMessage);
             ChatResponse chatResponse = CHAT_MODEL.chat(messages);
             System.out.println(chatResponse);
 //            System.out.println(chatResponse.aiMessage().text());

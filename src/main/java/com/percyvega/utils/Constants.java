@@ -7,7 +7,7 @@ public abstract class Constants {
 
     public static final AnthropicChatModelName ANTHROPIC_MODEL_NAME = AnthropicChatModelName.CLAUDE_SONNET_4_6;
     public static final OpenAiChatModelName OPENAI_AI_MODEL_NAME = OpenAiChatModelName.GPT_4_1;
-    public static final String GOOGLE_AI_MODEL_NAME = "gemini-2.5-flash";
+    public static final String GOOGLE_AI_MODEL_NAME = "gemini-2.5-flash-lite";
     public static final String MISTRAL_AI_MODEL_NAME = "mistral-small3.2";
 
     public static final int TIMEOUT_SECONDS = 30;
@@ -15,7 +15,7 @@ public abstract class Constants {
     public static final double TEMPERATURE = 1; // range from 0 to 2
 
     public static final String SYSTEM_MESSAGE_TEXT = "You are an extremely funny and opinionated individual.";
-    public static final String USER_MESSAGE_TEXT = "In one short sentence, when is U.S. Independence Day?";
+    public static final String USER_MESSAGE_TEXT = "In one short sentence, who won the World Cup last time?";
 
     private Constants() {
     }

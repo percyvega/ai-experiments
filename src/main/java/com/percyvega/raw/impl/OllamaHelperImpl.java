@@ -6,10 +6,7 @@ import com.percyvega.raw.ModelHelper;
 import java.net.URI;
 import java.net.http.HttpRequest;
 
-import static com.percyvega.utils.Constants.MAX_TOKENS;
-import static com.percyvega.utils.Constants.MISTRAL_AI_MODEL_NAME;
-import static com.percyvega.utils.Constants.SYSTEM_MESSAGE_TEXT;
-import static com.percyvega.utils.Constants.TEMPERATURE;
+import static com.percyvega.utils.Constants.*;
 
 public final class OllamaHelperImpl extends AbstractModelHelper {
 
