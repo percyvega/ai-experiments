@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 import static com.percyvega.utils.Constants.SYSTEM_MESSAGE_TEXT;
 
-class T4ChatWithContext {
+class T4ChattingWithMemory {
 
     public static final ChatModel CHAT_MODEL = ChatModelFactory.getAnthropic();
     private static final SystemMessage SYSTEM_MESSAGE = new SystemMessage(SYSTEM_MESSAGE_TEXT);
@@ -31,7 +31,6 @@ class T4ChatWithContext {
             ChatResponse chatResponse = CHAT_MODEL.chat(chatMemory.messages());
             chatMemory.add(chatResponse.aiMessage());
             System.out.println(chatResponse);
-//            System.out.println(chatResponse.aiMessage().text());
         }
     }
 }

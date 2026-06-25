@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 import static com.percyvega.utils.Constants.SYSTEM_MESSAGE_TEXT;
 
-class T3ChatWithoutContext {
+class T3Chatting {
 
     public static final ChatModel CHAT_MODEL = ChatModelFactory.getGoogle();
     private static final SystemMessage SYSTEM_MESSAGE = new SystemMessage(SYSTEM_MESSAGE_TEXT);
@@ -26,7 +26,6 @@ class T3ChatWithoutContext {
             List<ChatMessage> messages = List.of(SYSTEM_MESSAGE, userMessage);
             ChatResponse chatResponse = CHAT_MODEL.chat(messages);
             System.out.println(chatResponse);
-//            System.out.println(chatResponse.aiMessage().text());
         }
     }
 }

@@ -51,6 +51,5 @@ class T2SystemAndUserMessagesTest {
 
     private void logResponse(ChatResponse chatResponse) {
         log.info("\n{}", chatResponse);
-//        log.info("\n{}", chatResponse.aiMessage().text());
     }
 }
