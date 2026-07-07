@@ -23,7 +23,7 @@ There is no `Main`; experiments are driven by JUnit tests under `src/test/java/.
 
 - `ModelHelper` (interface) — the **only** public API surface: `String getResponseFromPrompt(String)`. Keep it slim; do not add methods here that callers shouldn't see.
 - `AbstractModelHelper` — owns the shared HTTP plumbing (`HttpClient.send`, `StopWatch` timing) and declares two `protected abstract` template methods: `getHttpRequest(String)` and `getBody(String)`. `getResponseFromPrompt` is `final` here.
-- `impl/*HelperImpl` — one `final class` per provider. Each has a `private` constructor and `public static final ModelHelper INSTANCE = new XHelperImpl();`. **`INSTANCE` is typed as `ModelHelper`, not the concrete class** — this is intentional so that `XHelperImpl.INSTANCE.` autocomplete only shows `getResponseFromPrompt`. Don't widen the type.
+- `impl/*HelperImpl` — one `final class` per provider. Each has a `private` constructor and `private static final ModelHelper INSTANCE = new XHelperImpl();`. **`INSTANCE` is typed as `ModelHelper`, not the concrete class** — this is intentional so that `XHelperImpl.INSTANCE.` autocomplete only shows `getResponseFromPrompt`. Don't widen the type.
 
 Adding a new provider in `raw`: extend `AbstractModelHelper`, override the two `protected` methods, expose `INSTANCE` typed as `ModelHelper`. The body JSON shape differs per provider (compare `GoogleHelperImpl` `contents/parts` vs OpenAI/Anthropic/Ollama `messages`).
 

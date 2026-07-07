@@ -13,7 +13,7 @@ import static com.percyvega.utils.Constants.SYSTEM_MESSAGE_TEXT;
 
 class T3Chatting {
 
-    public static final ChatModel CHAT_MODEL = ChatModelFactory.getGoogle();
+    private static final ChatModel CHAT_MODEL = ChatModelFactory.getGoogle();
     private static final SystemMessage SYSTEM_MESSAGE = new SystemMessage(SYSTEM_MESSAGE_TEXT);
 
     void main() {
