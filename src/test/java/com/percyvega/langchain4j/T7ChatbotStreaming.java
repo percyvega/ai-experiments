@@ -2,32 +2,30 @@ package com.percyvega.langchain4j;
 
 import dev.langchain4j.memory.ChatMemory;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
-import dev.langchain4j.model.chat.ChatModel;
+import dev.langchain4j.model.chat.StreamingChatModel;
 import dev.langchain4j.model.chat.response.ChatResponse;
-import dev.langchain4j.service.AiServices;
-import dev.langchain4j.service.SystemMessage;
-import dev.langchain4j.service.UserMessage;
-import dev.langchain4j.service.V;
+import dev.langchain4j.service.*;
 
 import java.util.Scanner;
+import java.util.concurrent.CompletableFuture;
 
 import static com.percyvega.utils.Constants.COMMAND_PROMPT;
 import static com.percyvega.utils.Constants.SYSTEM_MESSAGE_TEXT;
 
-class T6ChatbotWithAnnotations {
+class T7ChatbotStreaming {
 
-    private static final ChatModel CHAT_MODEL = ChatModelFactory.getAnthropic();
+    private static final StreamingChatModel CHAT_MODEL = StreamingChatModelFactory.getAnthropic();
 
     private final ChatMemory CHAT_MEMORY = MessageWindowChatMemory.withMaxMessages(10);
 
     public interface MyChatBot {
         @SystemMessage(SYSTEM_MESSAGE_TEXT)
-        @UserMessage("In one short sentence, {{userInput}}")
-        ChatResponse sendUserMessage(@V("userInput") String userInput);
+        @UserMessage("Use bullet points: {{userInput}}")
+        TokenStream sendUserMessage(@V("userInput") String userInput);
     }
 
     private final MyChatBot myChatBot = AiServices.builder(MyChatBot.class)
-            .chatModel(CHAT_MODEL)
+            .streamingChatModel(CHAT_MODEL)
             .chatMemory(CHAT_MEMORY)
             .build();
 
@@ -37,8 +35,16 @@ class T6ChatbotWithAnnotations {
             IO.print(COMMAND_PROMPT);
             String userInput = scanner.nextLine();
 
-            ChatResponse chatResponse = myChatBot.sendUserMessage(userInput);
-            IO.println(chatResponse);
+            CompletableFuture<ChatResponse> future = new CompletableFuture<>();
+            TokenStream tokenStream = myChatBot.sendUserMessage(userInput);
+
+            tokenStream.onPartialResponse(System.out::print)
+                    .onCompleteResponse(future::complete)
+                    .onError(future::completeExceptionally)
+                    .start();
+
+            future.join();
+            IO.println();
         }
     }
 }

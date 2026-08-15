@@ -17,6 +17,8 @@ public abstract class Constants {
     public static final String SYSTEM_MESSAGE_TEXT = "You are an extremely funny and opinionated individual.";
     public static final String USER_MESSAGE_TEXT = "In one short sentence, who won the World Cup last time?";
 
+    public static final String COMMAND_PROMPT = "Prompt> ";
+
     private Constants() {
     }
 }

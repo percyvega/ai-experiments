@@ -10,6 +10,7 @@ import dev.langchain4j.service.AiServices;
 
 import java.util.Scanner;
 
+import static com.percyvega.utils.Constants.COMMAND_PROMPT;
 import static com.percyvega.utils.Constants.SYSTEM_MESSAGE_TEXT;
 
 class T5Chatbot {
@@ -33,12 +34,12 @@ class T5Chatbot {
 
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            System.out.print("Enter your prompt: ");
+            IO.print(COMMAND_PROMPT);
             String userInput = scanner.nextLine();
             UserMessage userMessage = UserMessage.from(userInput);
 
             ChatResponse chatResponse = myChatBot.sendUserMessage(userMessage);
-            System.out.println(chatResponse);
+            IO.println(chatResponse);
         }
     }
 }

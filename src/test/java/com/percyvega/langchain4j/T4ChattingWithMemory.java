@@ -9,6 +9,7 @@ import dev.langchain4j.model.chat.response.ChatResponse;
 
 import java.util.Scanner;
 
+import static com.percyvega.utils.Constants.COMMAND_PROMPT;
 import static com.percyvega.utils.Constants.SYSTEM_MESSAGE_TEXT;
 
 class T4ChattingWithMemory {
@@ -23,14 +24,14 @@ class T4ChattingWithMemory {
 
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            System.out.print("Enter your prompt: ");
+            IO.print(COMMAND_PROMPT);
             String userInput = scanner.nextLine();
             UserMessage userMessage = UserMessage.from(userInput);
             CHAT_MEMORY.add(userMessage);
 
             ChatResponse chatResponse = CHAT_MODEL.chat(CHAT_MEMORY.messages());
             CHAT_MEMORY.add(chatResponse.aiMessage());
-            System.out.println(chatResponse);
+            IO.println(chatResponse);
         }
     }
 }
