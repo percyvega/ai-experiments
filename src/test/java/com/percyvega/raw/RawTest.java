@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import static com.percyvega.utils.Constants.USER_MESSAGE_TEXT;
-import static com.percyvega.utils.Utils.formatAsJson;
+import static com.percyvega.utils.JsonUtils.formatAsJson;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class RawTest {

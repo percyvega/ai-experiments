@@ -1,6 +1,6 @@
 package com.percyvega.raw;
 
-import com.percyvega.utils.Utils;
+import com.percyvega.utils.JsonUtils;
 import dev.langchain4j.exception.AuthenticationException;
 
 import java.io.IOException;
@@ -20,7 +20,7 @@ public abstract class AbstractModelHelper implements ModelHelper {
 
     @Override
     public final String extractPromptResponse(String modelResponse) {
-        return Utils.getValue(modelResponse, getPromptResponsePath());
+        return JsonUtils.getValue(modelResponse, getPromptResponsePath());
     }
 
     protected abstract String getPromptResponsePath();
