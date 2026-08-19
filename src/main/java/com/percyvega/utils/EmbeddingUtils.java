@@ -3,20 +3,21 @@ package com.percyvega.utils;
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.output.Response;
+import org.jspecify.annotations.NonNull;
 
 public abstract class EmbeddingUtils {
 
     private EmbeddingUtils() {
     }
 
-    public static float[] getEmbeddingVector(EmbeddingModel embeddingModel, String input) {
+    public static @NonNull Embedding getEmbedding(EmbeddingModel embeddingModel, String input) {
         Response<Embedding> response = embeddingModel.embed(input);
-        return response.content().vector();
+        return response.content();
     }
 
     // Calculate the Euclidean distance between two vectors.
     // Returns from 0 (identical) to +infinity (the farther apart, the less similar)
-    public static float euclideanDistance(float[] vector1, float[] vector2) {
+    private static float euclideanDistance(float[] vector1, float[] vector2) {
         float sumOfSquares = 0;
         for (int i = 0; i < vector1.length; i++) {
             float difference = vector1[i] - vector2[i];
