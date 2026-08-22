@@ -6,7 +6,6 @@ import dev.langchain4j.model.chat.StreamingChatModel;
 import dev.langchain4j.model.chat.response.ChatResponse;
 import dev.langchain4j.service.*;
 
-import java.util.Scanner;
 import java.util.concurrent.CompletableFuture;
 
 import static com.percyvega.utils.Constants.COMMAND_PROMPT;
@@ -30,11 +29,7 @@ class T7ChatbotStreaming {
             .build();
 
     void main() {
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
-            IO.print(COMMAND_PROMPT);
-            String userInput = scanner.nextLine();
-
+        for (String userInput = IO.readln(COMMAND_PROMPT); !userInput.isEmpty(); userInput = IO.readln(COMMAND_PROMPT)) {
             CompletableFuture<ChatResponse> future = new CompletableFuture<>();
             TokenStream tokenStream = myChatBot.sendUserMessage(userInput);
 

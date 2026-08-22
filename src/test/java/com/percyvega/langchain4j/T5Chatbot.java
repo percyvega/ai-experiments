@@ -8,8 +8,6 @@ import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.chat.response.ChatResponse;
 import dev.langchain4j.service.AiServices;
 
-import java.util.Scanner;
-
 import static com.percyvega.utils.Constants.COMMAND_PROMPT;
 import static com.percyvega.utils.Constants.SYSTEM_MESSAGE_TEXT;
 
@@ -32,10 +30,7 @@ class T5Chatbot {
     void main() {
         CHAT_MEMORY.add(SYSTEM_MESSAGE);
 
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
-            IO.print(COMMAND_PROMPT);
-            String userInput = scanner.nextLine();
+        for (String userInput = IO.readln(COMMAND_PROMPT); !userInput.isEmpty(); userInput = IO.readln(COMMAND_PROMPT)) {
             UserMessage userMessage = UserMessage.from(userInput);
 
             ChatResponse chatResponse = myChatBot.sendUserMessage(userMessage);

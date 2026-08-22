@@ -1,17 +1,41 @@
 package com.percyvega.utils;
 
+import com.percyvega.langchain4j.EmbeddingModelFactory;
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.output.Response;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jspecify.annotations.NonNull;
 
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import static java.util.stream.Collectors.toMap;
+
 public abstract class EmbeddingUtils {
+
+    private static final Logger log = LogManager.getLogger(EmbeddingUtils.class);
+
+    private static final EmbeddingModel EMBEDDING_MODEL = EmbeddingModelFactory.getOpenAi();
 
     private EmbeddingUtils() {
     }
 
-    public static @NonNull Embedding getEmbedding(EmbeddingModel embeddingModel, String input) {
-        Response<Embedding> response = embeddingModel.embed(input);
+    public static Map<String, Embedding> getEmbeddings(List<String> sentences) {
+        log.info("Embedding {} values...", sentences.size());
+        LinkedHashMap<String, Embedding> embeddings = sentences.stream()
+                .collect(toMap(s -> s,
+                        EmbeddingUtils::getEmbedding,
+                        (first, duplicate) -> first,
+                        LinkedHashMap::new));
+        log.info("Embedded {} values", embeddings.size());
+        return embeddings;
+    }
+
+    public static @NonNull Embedding getEmbedding(String input) {
+        Response<Embedding> response = EMBEDDING_MODEL.embed(input);
         return response.content();
     }
 

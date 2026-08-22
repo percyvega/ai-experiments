@@ -7,8 +7,6 @@ import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.chat.response.ChatResponse;
 
-import java.util.Scanner;
-
 import static com.percyvega.utils.Constants.COMMAND_PROMPT;
 import static com.percyvega.utils.Constants.SYSTEM_MESSAGE_TEXT;
 
@@ -22,10 +20,7 @@ class T4ChattingWithMemory {
     void main() {
         CHAT_MEMORY.add(SYSTEM_MESSAGE);
 
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
-            IO.print(COMMAND_PROMPT);
-            String userInput = scanner.nextLine();
+        for (String userInput = IO.readln(COMMAND_PROMPT); !userInput.isEmpty(); userInput = IO.readln(COMMAND_PROMPT)) {
             UserMessage userMessage = UserMessage.from(userInput);
             CHAT_MEMORY.add(userMessage);
 

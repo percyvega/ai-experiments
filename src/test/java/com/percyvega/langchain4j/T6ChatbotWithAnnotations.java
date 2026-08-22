@@ -9,8 +9,6 @@ import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
 import dev.langchain4j.service.V;
 
-import java.util.Scanner;
-
 import static com.percyvega.utils.Constants.COMMAND_PROMPT;
 import static com.percyvega.utils.Constants.SYSTEM_MESSAGE_TEXT;
 
@@ -32,11 +30,7 @@ class T6ChatbotWithAnnotations {
             .build();
 
     void main() {
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
-            IO.print(COMMAND_PROMPT);
-            String userInput = scanner.nextLine();
-
+        for (String userInput = IO.readln(COMMAND_PROMPT); !userInput.isEmpty(); userInput = IO.readln(COMMAND_PROMPT)) {
             ChatResponse chatResponse = myChatBot.sendUserMessage(userInput);
             IO.println(chatResponse);
         }

@@ -7,7 +7,6 @@ import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.chat.response.ChatResponse;
 
 import java.util.List;
-import java.util.Scanner;
 
 import static com.percyvega.utils.Constants.COMMAND_PROMPT;
 import static com.percyvega.utils.Constants.SYSTEM_MESSAGE_TEXT;
@@ -18,10 +17,7 @@ class T3Chatting {
     private static final SystemMessage SYSTEM_MESSAGE = new SystemMessage(SYSTEM_MESSAGE_TEXT);
 
     void main() {
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
-            IO.print(COMMAND_PROMPT);
-            String userInput = scanner.nextLine();
+        for (String userInput = IO.readln(COMMAND_PROMPT); !userInput.isEmpty(); userInput = IO.readln(COMMAND_PROMPT)) {
             UserMessage userMessage = UserMessage.from(userInput);
 
             List<ChatMessage> messages = List.of(SYSTEM_MESSAGE, userMessage);
