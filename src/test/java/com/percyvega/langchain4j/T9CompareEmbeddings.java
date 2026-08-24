@@ -37,7 +37,7 @@ class T9CompareEmbeddings {
                             cosineSimilarity(inputVector, embeddingEntry.getValue().vector()),
                             euclideanSimilarity(inputVector, embeddingEntry.getValue().vector())))
                     .sorted(Comparator.comparingDouble(Comparison::cosine).reversed())
-                    .limit(8)
+                    .limit(3)
                     .toList();
 
             log.info("COSINE | EUCLIDEAN | SENTENCE");

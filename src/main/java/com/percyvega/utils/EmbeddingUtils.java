@@ -2,6 +2,7 @@ package com.percyvega.utils;
 
 import com.percyvega.langchain4j.EmbeddingModelFactory;
 import dev.langchain4j.data.embedding.Embedding;
+import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.output.Response;
 import org.apache.logging.log4j.LogManager;
@@ -12,8 +13,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.stream.Collectors.toMap;
-
 public abstract class EmbeddingUtils {
 
     private static final Logger log = LogManager.getLogger(EmbeddingUtils.class);
@@ -23,13 +22,19 @@ public abstract class EmbeddingUtils {
     private EmbeddingUtils() {
     }
 
+    // One embedAll() call sends every sentence in a single request, rather than one request per sentence.
+    // Duplicates are dropped first, so nothing is paid for twice.
     public static Map<String, Embedding> getEmbeddings(List<String> sentences) {
         log.info("Embedding {} values...", sentences.size());
-        LinkedHashMap<String, Embedding> embeddings = sentences.stream()
-                .collect(toMap(s -> s,
-                        EmbeddingUtils::getEmbedding,
-                        (first, duplicate) -> first,
-                        LinkedHashMap::new));
+        List<String> distinctSentences = sentences.stream().distinct().toList();
+        List<Embedding> vectors = EMBEDDING_MODEL.embedAll(distinctSentences.stream()
+                .map(TextSegment::from)
+                .toList()).content();
+
+        LinkedHashMap<String, Embedding> embeddings = new LinkedHashMap<>();
+        for (int i = 0; i < distinctSentences.size(); i++) {
+            embeddings.put(distinctSentences.get(i), vectors.get(i));
+        }
         log.info("Embedded {} values", embeddings.size());
         return embeddings;
     }
@@ -39,22 +44,19 @@ public abstract class EmbeddingUtils {
         return response.content();
     }
 
-    // Calculate the Euclidean distance between two vectors.
-    // Returns from 0 (identical) to +infinity (the farther apart, the less similar)
-    private static float euclideanDistance(float[] vector1, float[] vector2) {
+    // Turn the Euclidean distance into a similarity score, so that bigger means more similar.
+    // Returns from 1 (identical) to 0 (infinitely far apart).
+    public static float euclideanSimilarity(float[] vector1, float[] vector2) {
+        // Calculate the Euclidean distance between two vectors.
+        // Returns from 0 (identical) to +infinity (the farther apart, the less similar)
         float sumOfSquares = 0;
         for (int i = 0; i < vector1.length; i++) {
             float difference = vector1[i] - vector2[i];
             sumOfSquares += difference * difference;
         }
+        float euclideanDistance = (float) Math.sqrt(sumOfSquares);
 
-        return (float) Math.sqrt(sumOfSquares);
-    }
-
-    // Turn the Euclidean distance into a similarity score, so that bigger means more similar.
-    // Returns from 1 (identical) to 0 (infinitely far apart).
-    public static float euclideanSimilarity(float[] vector1, float[] vector2) {
-        return 1 / (1 + euclideanDistance(vector1, vector2));
+        return 1 / (1 + euclideanDistance);
     }
 
     // Calculate the cosine of the angle between two vectors.
