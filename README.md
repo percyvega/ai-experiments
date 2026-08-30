@@ -2,26 +2,34 @@
 
 A personal sandbox for calling LLM providers from Java, in two flavors:
 
-- **`raw`** — direct HTTP via `java.net.http.HttpClient` and Jackson, no SDK.
-- **`langchain4j`** — the same providers wrapped through [LangChain4j](https://docs.langchain4j.dev/).
+- **`raw`** — direct HTTP via `java.net.http.HttpClient` and Jackson, no SDK. Shows what the providers' wire formats actually look like.
+- **`langchain4j`** — the same providers through [LangChain4j](https://docs.langchain4j.dev/), then further into memory, AI Services, streaming, and embeddings.
 
-Currently supports:
+The `langchain4j` experiments are numbered `T1` … `T10` and are meant to be read in order — each one adds a single idea to the one before it.
 
-- OpenAI (`gpt-4.1-mini`)
-- Anthropic (Claude Sonnet 4.x — model IDs are pinned in `ChatModelFactory` and each `*HelperImpl`)
-- Google (`gemini-2.5-flash`)
-- Ollama (`qwen3:4b`, local)
+## Providers
+
+| Provider  | Chat model              | Notes                                |
+|-----------|-------------------------|--------------------------------------|
+| Anthropic | `CLAUDE_SONNET_4_6`     | temperature halved (its range is 0–1) |
+| OpenAI    | `GPT_4_1`               | also the embedding provider           |
+| Google    | `gemini-2.5-flash-lite` |                                       |
+| Ollama    | `mistral-small3.2`      | local, no API key                     |
+
+Embeddings use OpenAI `text-embedding-3-small`.
+
+Model names, temperature, max tokens, timeout, and the default prompts all live in one place: **`com.percyvega.utils.Constants`**. Change them there and both packages follow.
 
 ## Requirements
 
-- JDK 25 (`maven.compiler.release=25`)
+- JDK 25 (`maven.compiler.release=25`). The interactive experiments use Java 25 instance `main()` methods and the implicit `IO` class, so an older JDK will not compile them.
 - Maven 3.9+
-- macOS (API keys are read from the macOS keychain — see below)
-- [Ollama](https://ollama.com/) running locally on port `11434` if you want to call the local provider
+- macOS — API keys are read from the macOS keychain (see below)
+- [Ollama](https://ollama.com/) on port `11434` if you want the local provider
 
 ## API keys
 
-Keys are read from the macOS keychain via `security find-generic-password`. Store them once:
+Keys are read from the macOS keychain via `security find-generic-password`. There is no env-var or `.env` fallback. Store them once:
 
 ```sh
 security add-generic-password -a "$USER" -s OPENAI_API_KEY    -w sk-...
@@ -31,38 +39,64 @@ security add-generic-password -a "$USER" -s GOOGLE_API_KEY    -w ...
 
 Ollama needs no key.
 
-## Run
+## Running
 
-There is no `Main` — experiments are driven by JUnit tests:
+There is no `Main`. Every experiment lives under `src/test/java`, and there are two kinds:
 
-```sh
-mvn test
-```
-
-Tests run **in parallel** (configured in `src/test/resources/junit-platform.properties`), so the four provider methods inside each test class fan out concurrently.
-
-Test classes:
-
-- `raw/RawTest` — exercises each `*HelperImpl.INSTANCE` (raw HTTP) and pretty-prints the JSON response.
-- `langchain4j/UserMessageTest` — single-string prompt against each `ChatModelFactory.getX()`.
-- `langchain4j/UserAndSystemMessagesTest` — `SystemMessage` + `UserMessage` list against each `ChatModel`.
-
-Run a single class from your IDE, or:
+**JUnit tests** — run with Maven or from the IDE:
 
 ```sh
-mvn test -Dtest=UserMessageTest
+mvn test                        # RawTest, T1, T2
+mvn test -Dtest=T1UserMessageTest
+mvn test -Dtest=T8Embedding     # T8 needs naming explicitly; see below
 ```
+
+One wrinkle: Surefire only picks up classes matching `Test*` / `*Test` / `*Tests` / `*TestCase`, and the pom does not override that. `T8Embedding` is a real `@Test` but its name matches none of those, so a bare `mvn test` **silently skips it**. Run it from the IDE, name it with `-Dtest=`, or rename the class if you want it in the default run.
+
+**Interactive `main()` methods** — these read from the console, which a test runner does not give you, so run them from the IDE (green gutter arrow) rather than through `mvn test`. Enter an empty line to quit.
+
+| Experiment                   | Kind        | What it shows                                                                                   |
+|------------------------------|-------------|-------------------------------------------------------------------------------------------------|
+| `raw/RawTest`                | JUnit       | Each `*HelperImpl.INSTANCE` over plain HTTP; pretty-prints the raw JSON response                  |
+| `T1UserMessageTest`          | JUnit       | The smallest thing that works: one string prompt to each `ChatModel`                             |
+| `T2SystemAndUserMessagesTest`| JUnit       | A `SystemMessage` + `UserMessage` list instead of a bare string                                  |
+| `T3Chatting`                 | Interactive | A prompt loop — and the demonstration that, with no memory, the model forgets every turn         |
+| `T4ChattingWithMemory`       | Interactive | `MessageWindowChatMemory` (10 messages), fed and updated by hand                                 |
+| `T5Chatbot`                  | Interactive | The same thing via `AiServices` — declare an interface, let LangChain4j wire the memory          |
+| `T6ChatbotWithAnnotations`   | Interactive | `@SystemMessage` / `@UserMessage` / `@V` prompt templating on the interface                      |
+| `T7ChatbotStreaming`         | Interactive | `StreamingChatModel` + `TokenStream`, printing partial responses as they arrive                  |
+| `T8Embedding`                | JUnit\*     | What an embedding *is* — log the raw vector for one sentence                                     |
+| `T9CompareEmbeddings`        | Interactive | Hand-rolled retrieval: cosine vs. euclidean similarity over the sentences of a text file          |
+| `T10EmbeddingStore`          | Interactive | The same retrieval, but with LangChain4j's `InMemoryEmbeddingStore` and its scoring               |
+
+\* `T8` is a `@Test`, but not one `mvn test` finds on its own — see the naming note above.
+
+`T9` and `T10` both embed `src/test/resources/introduction-to-java.txt` at startup, then let you ask questions against it and show the three closest sentences.
+
+Note that parallel test execution is currently **disabled** — the settings in `src/test/resources/junit-platform.properties` are commented out. Uncomment them to make the four provider methods in `RawTest` / `T1` / `T2` fan out concurrently; the log pattern includes `[%t]` so you can tell the threads apart.
 
 ## Architecture
 
 ### `raw` — template-method hierarchy
 
-- `ModelHelper` — public interface, exposes only `getResponseFromPrompt(String)`.
-- `AbstractModelHelper` — shared `HttpClient` + Jackson + `StopWatch` plumbing; declares `protected abstract getHttpRequest(...)` and `getBody(...)`.
-- `impl/*HelperImpl` — one `final class` per provider, exposing `private static final ModelHelper INSTANCE`.
+- `ModelHelper` — the public interface: `getModelResponse(String)` returns the provider's raw JSON, `extractPromptResponse(String)` digs the assistant's text back out of it.
+- `AbstractModelHelper` — owns the shared `HttpClient` plumbing and the non-200 handling; both interface methods are `final` here. Subclasses fill in three `protected abstract` hooks: `getHttpRequest(String)`, `getBody(String)`, and `getPromptResponsePath()`.
+- `impl/*HelperImpl` — one `final class` per provider, with a private constructor and a `public static final ModelHelper INSTANCE`. `INSTANCE` is deliberately typed as the interface, not the concrete class, so autocomplete on it stays small.
 
-Adding a new provider: extend `AbstractModelHelper`, override the two `protected` methods, expose an `ModelHelper INSTANCE`.
+The interesting part is the diff between providers: Google nests `contents`/`parts` where the others use `messages`, and each one buries the reply at a different JSON pointer (`/content/0/text` for Anthropic, `/candidates/0/content/parts/0/text` for Google, `/choices/0/message/content` for OpenAI and Ollama — Ollama being served through its OpenAI-compatible endpoint).
 
-### `langchain4j` — factory of `ChatModel`s
+Adding a provider: extend `AbstractModelHelper`, implement the three `protected` methods, expose a `ModelHelper INSTANCE`.
 
-- `ChatModelFactory` — static `getAnthropic()` / `getOpenAi()` / `getGoogle()` / `getOllama()` returning a fresh LangChain4j `ChatModel`. Models, temperatures, and timeouts are hard-coded; tweak them here.
+### `langchain4j` — factories
+
+- `ChatModelFactory` — `getAnthropic()` / `getOpenAi()` / `getGoogle()` / `getOllama()`, each returning a fresh `ChatModel`.
+- `StreamingChatModelFactory` — the same four, returning `StreamingChatModel` (used by `T7`).
+- `EmbeddingModelFactory` — `getOpenAi()`, returning an `EmbeddingModel`.
+
+### `utils`
+
+- `Constants` — model names, temperature, max tokens, timeout, default system/user prompts.
+- `ApiKeys` — keychain lookups (`openAI()`, `anthropic()`, `google()`).
+- `JsonUtils` — `formatAsJson` (pretty-print) and `getValue` (JSON-pointer extraction).
+- `FileUtils` — `getSentences(fileName)`, splitting a classpath resource into sentences with `BreakIterator` rather than on `"."`.
+- `EmbeddingUtils` — `getEmbedding` / `getEmbeddings` (one batched `embedAll` call, duplicates dropped first) plus `cosineSimilarity` and `euclideanSimilarity`, each documented with the range it actually lands in.

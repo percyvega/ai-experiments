@@ -44,8 +44,13 @@ public abstract class EmbeddingUtils {
         return response.content();
     }
 
-    // Turn the Euclidean distance into a similarity score, so that bigger means more similar.
-    // Returns from 1 (identical) to 0 (infinitely far apart).
+    // Euclidean asks "are these vectors in the same place?"
+    // Calculate the straight-line distance between the tips of two vectors (Pythagoras, in n dimensions),
+    // then turn that (Euclidean) distance into a similarity score, so that bigger means more similar.
+    // Euclidean similarity returns a range between:
+    //  - 1 (distance 0, identical)
+    //  - 0 (infinitely far apart, and never actually reached)
+    // In practice it lands between 0.46 and 0.69, with 0.5 or less for unrelated vectors.
     public static float euclideanSimilarity(float[] vector1, float[] vector2) {
         // Calculate the Euclidean distance between two vectors.
         // Returns from 0 (identical) to +infinity (the farther apart, the less similar)
@@ -59,10 +64,14 @@ public abstract class EmbeddingUtils {
         return 1 / (1 + euclideanDistance);
     }
 
+    // Cosine asks "are these vectors pointing the same way?"
     // Calculate the cosine of the angle between two vectors.
     // The angle between two vectors tells us how similar they are. A small angle means the vectors are pointing in a similar direction. They're more similar.
-    // Returns +1 (0 degrees, same direction), 0 (90 degrees, unrelated) or -1 (180 degrees, opposite meaning).
-    // Embedding vectors are rarely opposite, so in practice it lands between 0 and 1.
+    // Cosine returns a range between:
+    //  - +1 (0 degrees, same direction)
+    //  -  0 (90 degrees, unrelated)
+    //  - -1 (180 degrees, opposite meaning)
+    // Embedding vectors are rarely opposite, so in practice it lands between 0.3 and 0.9, with 0.5 or less for unrelated vectors.
     public static float cosineSimilarity(float[] vector1, float[] vector2) {
         float dotProduct = 0;
         float norm1 = 0;

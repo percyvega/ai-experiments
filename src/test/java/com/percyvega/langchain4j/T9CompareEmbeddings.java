@@ -24,7 +24,9 @@ class T9CompareEmbeddings {
 
     // Interactive, so it is a main() rather than a @Test: a test runner gives us no console to read from.
     void main() {
+        log.info("Embedding and keeping sentences...");
         Map<String, Embedding> embeddingMap = EmbeddingUtils.getEmbeddings(FileUtils.getSentences(FILE_NAME));
+        log.info("Sentences embedded and kept.");
 
         for (String userInput = IO.readln(COMMAND_PROMPT); !userInput.isEmpty(); userInput = IO.readln(COMMAND_PROMPT)) {
 

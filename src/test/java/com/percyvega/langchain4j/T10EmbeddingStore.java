@@ -29,16 +29,17 @@ class T10EmbeddingStore {
 
             Embedding questionEmbedding = EmbeddingUtils.getEmbedding(userInput);
 
-            // Scores are (cosine + 1) / 2, so even unrelated text sits near 0.55. Hence, a floor well above it.
+            // Scores are (cosine + 1) / 2, so even unrelated text sits near 0.75.
             EmbeddingSearchRequest embeddingSearchRequest = EmbeddingSearchRequest.builder()
                     .queryEmbedding(questionEmbedding)
                     .maxResults(3) // default is 3
-                    .minScore(0.7)
+                    .minScore(0.75)
                     .build();
 
             EmbeddingSearchResult<TextSegment> embeddingSearchResult = embeddingStore.search(embeddingSearchRequest);
+            log.info("LANGCHAIN4J SCORE | SENTENCE");
             embeddingSearchResult.matches()
-                    .forEach(match -> log.info("{} | {}", match.score(), match.embedded().text()));
+                    .forEach(match -> log.info(String.format("           %6.4f | %s", match.score(), match.embedded().text())));
         }
     }
 
