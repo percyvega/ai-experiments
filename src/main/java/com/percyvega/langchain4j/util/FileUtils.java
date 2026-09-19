@@ -1,7 +1,6 @@
 package com.percyvega.utils;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,9 +12,8 @@ import java.util.Locale;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+@Log4j2
 public abstract class FileUtils {
-
-    private static final Logger log = LogManager.getLogger(FileUtils.class);
 
     // BreakIterator knows that a period is not always a sentence end, unlike splitting on ".".
     private static List<String> getSentencesFromText(String text) {

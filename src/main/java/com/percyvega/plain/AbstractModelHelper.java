@@ -1,7 +1,6 @@
 package com.percyvega.raw;
 
 import com.percyvega.utils.JsonUtils;
-import dev.langchain4j.exception.AuthenticationException;
 
 import java.io.IOException;
 import java.net.http.HttpClient;
@@ -33,7 +32,7 @@ public abstract class AbstractModelHelper implements ModelHelper {
                 HttpResponse<String> httpResponse = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
                 if (httpResponse.statusCode() != 200) {
-                    throw new AuthenticationException(getBodyErrorMessage(httpResponse));
+                    throw new RuntimeException(getBodyErrorMessage(httpResponse));
                 }
 
                 return httpResponse.body();

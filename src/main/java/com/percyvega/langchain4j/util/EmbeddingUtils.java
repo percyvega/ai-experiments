@@ -5,17 +5,15 @@ import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.output.Response;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 import org.jspecify.annotations.NonNull;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+@Log4j2
 public abstract class EmbeddingUtils {
-
-    private static final Logger log = LogManager.getLogger(EmbeddingUtils.class);
 
     private static final EmbeddingModel EMBEDDING_MODEL = EmbeddingModelFactory.getOpenAi();
 
