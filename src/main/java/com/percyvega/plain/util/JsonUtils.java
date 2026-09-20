@@ -1,4 +1,4 @@
-package com.percyvega.utils;
+package com.percyvega.plain.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

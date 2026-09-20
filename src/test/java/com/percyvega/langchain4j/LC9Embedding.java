@@ -3,13 +3,11 @@ package com.percyvega.langchain4j;
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.output.Response;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 
-class T8Embedding {
-
-    private static final Logger log = LogManager.getLogger(T8Embedding.class);
+@Log4j2
+class LC9Embedding {
 
     private static final EmbeddingModel EMBEDDING_MODEL = EmbeddingModelFactory.getOpenAi();
 

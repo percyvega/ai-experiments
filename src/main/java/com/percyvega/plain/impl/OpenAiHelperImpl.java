@@ -1,7 +1,7 @@
-package com.percyvega.raw.impl;
+package com.percyvega.plain.impl;
 
-import com.percyvega.raw.AbstractModelHelper;
-import com.percyvega.raw.ModelHelper;
+import com.percyvega.plain.AbstractModelHelper;
+import com.percyvega.plain.ModelHelper;
 import com.percyvega.utils.ApiKeys;
 
 import java.net.URI;
@@ -22,12 +22,12 @@ public final class OpenAiHelperImpl extends AbstractModelHelper {
                 .uri(URI.create("https://api.openai.com/v1/chat/completions"))
                 .header("Content-Type", "application/json")
                 .header("Authorization", "Bearer " + ApiKeys.openAI())
-                .POST(HttpRequest.BodyPublishers.ofString(getBody(prompt)))
+                .POST(HttpRequest.BodyPublishers.ofString(getRequestPayload(prompt)))
                 .build();
     }
 
     @Override
-    protected String getBody(String prompt) {
+    protected String getRequestPayload(String prompt) {
         return """
                 {
                     "model": "%s",
@@ -48,7 +48,7 @@ public final class OpenAiHelperImpl extends AbstractModelHelper {
     }
 
     @Override
-    public String getPromptResponsePath() {
+    protected String getPromptResponseJsonPointer() {
         return "/choices/0/message/content";
     }
 }

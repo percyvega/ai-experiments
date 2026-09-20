@@ -1,4 +1,4 @@
-package com.percyvega.utils;
+package com.percyvega.langchain4j.util;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -30,8 +30,6 @@ public abstract class FileUtils {
             }
         }
 
-//        log.info("Sentences:");
-//        sentences.forEach(s -> IO.println(s));
         return sentences;
     }
 
@@ -41,9 +39,7 @@ public abstract class FileUtils {
                 throw new IllegalStateException("Not found on the classpath: " + fileName);
             }
 
-            String contents = new String(inputStream.readAllBytes(), UTF_8);
-//            log.info("File contents: \n" + contents);
-            return contents;
+            return new String(inputStream.readAllBytes(), UTF_8);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

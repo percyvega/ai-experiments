@@ -1,6 +1,6 @@
-package com.percyvega.raw;
+package com.percyvega.plain;
 
-import com.percyvega.utils.JsonUtils;
+import com.percyvega.plain.util.JsonUtils;
 
 import java.io.IOException;
 import java.net.http.HttpClient;
@@ -19,10 +19,10 @@ public abstract class AbstractModelHelper implements ModelHelper {
 
     @Override
     public final String extractPromptResponse(String modelResponse) {
-        return JsonUtils.getValue(modelResponse, getPromptResponsePath());
+        return JsonUtils.getValue(modelResponse, getPromptResponseJsonPointer());
     }
 
-    protected abstract String getPromptResponsePath();
+    protected abstract String getPromptResponseJsonPointer();
 
     private String getHttpResponse(HttpRequest httpRequest) {
         try (HttpClient client = HttpClient.newBuilder()
@@ -48,6 +48,6 @@ public abstract class AbstractModelHelper implements ModelHelper {
 
     protected abstract HttpRequest getHttpRequest(String prompt);
 
-    protected abstract String getBody(String prompt);
+    protected abstract String getRequestPayload(String prompt);
 
 }

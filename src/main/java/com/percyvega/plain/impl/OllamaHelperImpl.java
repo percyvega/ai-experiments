@@ -1,7 +1,7 @@
-package com.percyvega.raw.impl;
+package com.percyvega.plain.impl;
 
-import com.percyvega.raw.AbstractModelHelper;
-import com.percyvega.raw.ModelHelper;
+import com.percyvega.plain.AbstractModelHelper;
+import com.percyvega.plain.ModelHelper;
 
 import java.net.URI;
 import java.net.http.HttpRequest;
@@ -20,12 +20,12 @@ public final class OllamaHelperImpl extends AbstractModelHelper {
         return HttpRequest.newBuilder()
                 .uri(URI.create("http://localhost:11434/v1/chat/completions"))
                 .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(getBody(prompt)))
+                .POST(HttpRequest.BodyPublishers.ofString(getRequestPayload(prompt)))
                 .build();
     }
 
     @Override
-    protected String getBody(String prompt) {
+    protected String getRequestPayload(String prompt) {
         return """
                 {
                     "model": "%s",
@@ -46,7 +46,7 @@ public final class OllamaHelperImpl extends AbstractModelHelper {
     }
 
     @Override
-    public String getPromptResponsePath() {
+    protected String getPromptResponseJsonPointer() {
         return "/choices/0/message/content";
     }
 }

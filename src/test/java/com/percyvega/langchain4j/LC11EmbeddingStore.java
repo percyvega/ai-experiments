@@ -1,22 +1,21 @@
 package com.percyvega.langchain4j;
 
-import com.percyvega.utils.EmbeddingUtils;
-import com.percyvega.utils.FileUtils;
+import com.percyvega.langchain4j.util.EmbeddingUtils;
+import com.percyvega.langchain4j.util.FileUtils;
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.store.embedding.EmbeddingSearchRequest;
 import dev.langchain4j.store.embedding.EmbeddingSearchResult;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.List;
 
-class T10EmbeddingStore {
+@Log4j2
+class LC11EmbeddingStore {
 
     public static final String FILE_NAME = "/introduction-to-java.txt";
-    private static final Logger log = LogManager.getLogger(T10EmbeddingStore.class);
 
     private static final EmbeddingStore<TextSegment> embeddingStore = new InMemoryEmbeddingStore<>();
     public static final String COMMAND_PROMPT = "\nAsk me something about Java> ";

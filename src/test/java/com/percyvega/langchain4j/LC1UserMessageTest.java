@@ -9,7 +9,7 @@ import static com.percyvega.utils.Constants.USER_MESSAGE_TEXT;
 
 @Log4j2
 @Execution(ExecutionMode.CONCURRENT)
-class LC1_UserMessageTest {
+class LC1UserMessageTest {
 
     @Test
     void anthropic() {

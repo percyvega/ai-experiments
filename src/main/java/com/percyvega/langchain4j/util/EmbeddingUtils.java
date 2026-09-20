@@ -1,4 +1,4 @@
-package com.percyvega.utils;
+package com.percyvega.langchain4j.util;
 
 import com.percyvega.langchain4j.EmbeddingModelFactory;
 import dev.langchain4j.data.embedding.Embedding;

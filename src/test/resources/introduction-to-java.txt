@@ -1,182 +1,150 @@
-Java is a general-purpose, statically typed, class-based, object-oriented programming
-language that runs on a virtual machine. It began in 1991 at Sun Microsystems as a
-project called Oak, led by James Gosling, Mike Sheridan, and Patrick Naughton. The
-original target was consumer electronics -- set-top boxes and interactive television --
-a market that never materialized as its backers expected. What rescued the language was
-the rise of the web. Renamed Java, it was released publicly in 1995 with a promise that
-became one of the most famous slogans in computing: write once, run anywhere. Applets
-running inside Netscape Navigator gave Java its first visibility, but its lasting
-foothold turned out to be on the server, not in the browser. Oracle acquired Sun in 2010
-and has stewarded the language since, and the reference implementation, OpenJDK, is open
-source under the GPL with a linking exception.
-
-Java's defining architectural decision is the Java Virtual Machine. Java source code
-compiles not to machine code for a specific processor but to bytecode: a compact,
-platform-neutral instruction set. Any machine with a compatible JVM can execute that
-bytecode without recompilation. This indirection is the origin of Java's portability,
-and it enables a great deal of runtime sophistication. The JVM's just-in-time compiler
-watches which code paths are actually hot during execution and compiles those to
-optimized native machine code on the fly, using profiling information that a traditional
-ahead-of-time compiler simply does not have. It can inline aggressively across method
-boundaries, eliminate bounds checks it can prove redundant, and deoptimize back to the
-interpreter when an assumption turns out to be wrong. Long-running Java servers routinely
-reach throughput competitive with C++.
-
-The JVM also manages memory automatically. Garbage collection removes an entire category
-of defects -- dangling pointers, double frees, most leaks -- that plague manually managed
-languages, and it does so without the programmer writing any deallocation code at all.
-Modern collectors are a genuine engineering achievement: G1 balances throughput against
-predictable pauses, while ZGC and Shenandoah keep pause times in the low single-digit
-milliseconds even on multi-terabyte heaps, largely answering the historical complaint
-that garbage collection made Java unsuitable for latency-sensitive work. Tuning is still
-sometimes necessary, but the defaults are good enough that most applications never touch
-them.
-
-The language itself is deliberately conservative. Everything lives inside a class; there
-are no free-floating functions. Types are checked at compile time, which catches a large
-class of mistakes before deployment and, just as importantly, gives tools the information
-they need for reliable refactoring, navigation, and completion. Java's tooling -- IntelliJ
-IDEA, Eclipse, VS Code with the Java extensions, plus profilers like JFR and async-profiler
--- has always been one of its real competitive advantages, and that quality is downstream
-of static typing.
-
-Java's design philosophy consistently favors readability and explicitness over brevity.
-The designers deliberately omitted features they considered error-prone: no operator
-overloading, no multiple inheritance of implementation (interfaces provide a safer
-alternative), no direct pointer arithmetic, no preprocessor macros. Critics call the
-result verbose, and they are not wrong. Defenders point out that code is read far more
-often than it is written, and that Java codebases stay comprehensible to new team members
-years later -- a real economic benefit on large, long-lived systems maintained by rotating
-teams.
-
-The core feature set reflects that same taste. Interfaces define contracts independent of
-implementation and, since Java 8, can carry default methods. Generics provide compile-time
-type safety for collections, though they are implemented by erasure, a compromise made to
-preserve backward compatibility that still leaks through in occasional awkward corners.
-Exceptions come in checked and unchecked flavors, with checked exceptions forcing callers
-to acknowledge recoverable failures -- a decision that remains one of Java's most debated.
-Annotations attach metadata that frameworks read reflectively, and they became the
-foundation of the entire modern Java framework style. The collections framework, with its
-List, Map, and Set hierarchies, is one of the most carefully designed standard libraries
-in any language.
-
-Writing Java day to day feels methodical. A class declares its package and imports, a
-method declares its return type and every parameter type, and the compiler refuses to
-proceed until the shapes line up. The famous ceremony of public static void main is the
-entry point every beginner meets first, and it fairly represents the language: nothing is
-implicit, everything is named. In practice most Java work is not writing algorithms from
-scratch but composing well-understood libraries -- wiring a request handler to a service
-to a repository, mapping between records and rows, adding a test at each layer. The
-feedback loop is compile, test, iterate, and because the type checker eliminates whole
-categories of error before a program ever runs, the tests that remain tend to be about
-behavior rather than typos.
-
-Concurrency has been part of Java since version 1.0, when threads and the synchronized
-keyword were built into the language rather than bolted on. The Java memory model, revised
-in Java 5, gave the platform a precise specification of what concurrent programs are
-allowed to observe -- work that influenced C++ and other languages afterward. The
-java.util.concurrent library added thread pools, concurrent collections, atomics, locks,
-and futures, replacing hand-rolled synchronization with tested building blocks. The most
-significant recent change is virtual threads, delivered in Java 21 by Project Loom:
-lightweight, JVM-managed threads that make it practical to write straightforward blocking
-code while handling millions of concurrent operations, largely removing the need for the
-complex reactive and callback styles that had grown up to work around the cost of platform
-threads.
-
-Java's evolution was famously slow for a decade -- Java 6 to Java 7 took five years -- and
-then the pace changed completely. Java 5, in 2004, brought generics, annotations, enums,
-varargs, and the enhanced for loop, and was arguably the largest single language update.
-Java 8, in 2014, added lambda expressions, method references, the Streams API, and
-Optional, bringing functional idioms into mainstream Java; it remains the most widely
-deployed version in legacy estates. Java 9, in 2017, introduced the module system from
-Project Jigsaw, allowing explicit dependency declaration and real encapsulation boundaries
-between components. It also marked the switch to a six-month release cadence, with a
-long-term support release designated every two years. The LTS versions since -- 11, 17,
-21, and 25 -- have delivered var type inference, records as concise immutable data
-carriers, sealed classes, pattern matching for switch and instanceof, text blocks for
-multi-line strings, and virtual threads. Ongoing work includes Project Valhalla for value
-types and better memory layout, Project Panama for cleaner native interop, and continued
-refinement of pattern matching toward a more expressive, more functional Java.
-
-The ecosystem is one of the largest and most mature in software. Maven and Gradle, backed
-by the Maven Central repository, provide dependency management over an enormous library
-catalog with reproducible builds. Spring and Spring Boot dominate enterprise application
-development, offering dependency injection, web frameworks, data access, and security
-under a convention-over-configuration approach that stripped away much of the XML ceremony
-that once defined enterprise Java. Jakarta EE, the successor to Java EE, carries the
-standardized enterprise specifications, and newer frameworks like Quarkus and Micronaut
-target fast startup and small footprints for containers. Testing is anchored by JUnit and
-Mockito. A large share of the world's data infrastructure -- Hadoop, Spark, Kafka,
-Elasticsearch, Cassandra, Flink -- is written in Java or runs on the JVM.
-
-The JVM also hosts an entire family of other languages. Kotlin is now Google's preferred
-language for Android; Scala, Clojure, and Groovy each carved out substantial niches. All
-of them interoperate with Java libraries, which means an organization's investment in the
-JVM platform outlives any particular language choice -- an unusual kind of durability in
-this industry.
-
-Java's strongholds are enterprise backend systems, financial services from trading
-platforms to payment processing and banking cores, large-scale distributed systems, and
-Android, where Java was the original development language and remains widely present even
-as Kotlin takes over new work. Government systems, healthcare, insurance, telecom, and
-retail run enormous Java estates. It is also common as a teaching language. Java is less
-often chosen for systems programming, quick scripting, data science, where Python owns the
-space, or front-end web development.
-
-The standard criticisms are worth stating plainly. Java is verbose, though records, var,
-and pattern matching have narrowed the gap considerably. Startup time and memory footprint
-are heavy relative to native binaries, which matters in serverless and container-dense
-deployments; GraalVM native images address both by compiling ahead of time, at the cost of
-some reflection-dependent dynamic behavior. Erasure-based generics, checked exceptions,
-and null as an ordinary value are design decisions that a language starting fresh today
-would probably make differently. And the sheer weight of the ecosystem cuts both ways:
-there is a library for everything, and there is also a decade of accumulated
-configuration idioms to learn.
-
-The standard library extends far past collections. There is mature file and network I/O
-in java.io and java.nio, a modern date and time API in java.time that replaced the
-error-prone Date and Calendar classes, a built-in HTTP client with HTTP/2 support, regular
-expressions, cryptography, internationalization, and structured logging hooks. Much of
-what other ecosystems reach for a dependency to solve is already present and specified.
-That breadth is part of why Java applications age well: the pieces that come with the
-platform keep working across upgrades.
-
-One practical detail newcomers stumble over is that there is no single Java download. The
-specification is implemented by several builds of OpenJDK -- Eclipse Temurin, Amazon
-Corretto, Azul Zulu, Microsoft and Red Hat builds, and Oracle's own JDK -- which are
-functionally equivalent for almost all purposes but differ in support terms and licensing.
-Oracle's commercial licensing changes over the years caused real confusion, and the
-sensible default for most teams is a free OpenJDK distribution with long-term support.
-Tools like SDKMAN and jenv make switching between installed versions routine.
-
-What holds it all together is a culture that treats backward compatibility as close to
-sacred. Bytecode compiled twenty years ago generally still runs on a current JVM, and the
-JDK's careful, specification-first process for language changes -- proposals debated
-publicly as JEPs, features shipped first as previews -- means the language moves without
-breaking what came before. That discipline is why organizations have been willing to build
-systems on Java with expected lifetimes measured in decades.
-
-Performance culture deserves a mention too. Because the JVM is instrumented so heavily,
-Java developers have unusually good visibility into what their programs actually do: JDK
-Flight Recorder captures allocation, lock contention, and GC behavior with low overhead in
-production, and JMH makes microbenchmarking rigorous rather than anecdotal. The habit that
-follows is measure first, then optimize, which is a healthier default than most ecosystems
-manage to instill.
-
-The community around the language is unusually institutional. Changes flow through the
-Java Community Process and the OpenJDK project, with JEPs debated in public mailing lists
-by engineers who often maintain the affected code themselves. Conferences like JavaOne's
-successors, Devoxx, and JVM Language Summit keep the conversation technical rather than
-promotional, and the volume of documentation, books, and answered questions accumulated
-over three decades means almost any problem a developer hits has been written up
-somewhere. For a beginner that depth is both the appeal and the hazard: much of the
-material found by searching describes idioms from 2008, and telling current advice from
-obsolete advice is its own skill.
-
-Roughly thirty years after its debut, Java consistently ranks in the top three or four
-languages by usage in surveys like TIOBE and the Stack Overflow Developer Survey. The
-talent pool is deep, the tooling is excellent, and the combination of a rapid release
-cadence, virtual threads, and modern language features has left Java noticeably more
-expressive than its reputation suggests. It is rarely the most exciting choice available,
-and it remains one of the safest long-term bets for building systems that need to run
-reliably for a very long time.
+What is Java? Java is a high-level, class-based, object-oriented language that compiles to platform-neutral bytecode run by a virtual machine.
+Who created Java and when? James Gosling created it at Sun Microsystems, and it was released publicly in 1995.
+Who owns Java today? Oracle owns it, having acquired Sun Microsystems in 2010.
+What does "write once, run anywhere" mean? Compiled bytecode runs unchanged on any platform that provides a JVM.
+What is the JVM? The Java Virtual Machine is the runtime engine that loads, verifies, and executes bytecode.
+What is the JRE? The Java Runtime Environment is the JVM plus the core class libraries needed to run programs.
+What is the JDK? The Java Development Kit is the JRE plus development tools such as javac, javadoc, and jdb.
+What is the difference between the JDK, the JRE, and the JVM? The JDK builds programs, the JRE runs them, and the JVM executes the bytecode.
+What is bytecode? Bytecode is the intermediate, platform-neutral instruction set stored in .class files and produced by javac.
+Is Java compiled or interpreted? Both: javac compiles source to bytecode, and the JVM interprets it while JIT-compiling the hot paths to native code.
+What is the JIT compiler? The Just-In-Time compiler translates frequently executed bytecode into native machine code at runtime for speed.
+What is OpenJDK? OpenJDK is the free, open-source reference implementation of Java, and its builds are free to use commercially.
+Which Java versions are long-term support? Java 8, 11, 17, 21, and 25 are LTS, with a feature release every six months.
+What is the entry point of a Java program? The method public static void main(String[] args).
+Why is the main method static? Because the JVM must call it before any object of the class exists.
+What are Java's primitive types? byte, short, int, long, float, double, char, and boolean.
+What are the default values of fields? Zero for numbers, false for boolean, the null character for char, and null for references; local variables have no default and must be assigned before use.
+What is autoboxing? The automatic conversion between a primitive and its wrapper class, such as int and Integer.
+What is the difference between int and Integer? int is a primitive holding a value; Integer is an object that can be null and carries boxing overhead.
+What is var? Local-variable type inference, added in Java 10; the variable is still statically and permanently typed.
+Is Java pass-by-value or pass-by-reference? Always pass-by-value; for objects it is the reference itself that gets copied.
+What is the difference between == and equals()? == compares references or primitive values, while equals() compares logical equality as the class defines it.
+What is the equals/hashCode contract? Equal objects must return equal hash codes, otherwise hash-based collections such as HashMap misbehave.
+Why override toString()? To give a class a readable textual form for logging and debugging instead of the default type and hash code.
+Why are Strings immutable? Immutability makes them safe to share across threads, cacheable in the string pool, and reliable as map keys.
+When should I use StringBuilder instead of String? For repeated concatenation, especially in loops, because each String concatenation allocates a new object.
+What is the difference between StringBuilder and StringBuffer? StringBuffer is synchronized and slower; StringBuilder is the default choice for single-threaded use.
+What is the string pool? A JVM-managed cache of string literals so identical literals share one object; intern() adds a runtime string to it.
+What is a text block? A multi-line string literal delimited by triple quotes, added in Java 15, that preserves formatting without escape sequences.
+What is a switch expression? A switch that produces a value using arrow labels, with yield for block bodies and no fall-through.
+What is pattern matching for instanceof? Syntax that tests a type and binds a typed variable in one step, as in if (o instanceof String s).
+What is pattern matching for switch? Switching on the type or shape of a value, including record deconstruction, which pairs naturally with sealed hierarchies.
+What is a record? A concise, immutable data carrier whose fields, constructor, accessors, equals, hashCode, and toString are generated by the compiler.
+What is a sealed class? A class or interface that explicitly permits which types may extend it, letting the compiler reason about the whole hierarchy.
+What is an enum? A type with a fixed set of named instances; it can have fields, constructors, and methods like any class.
+What is an interface? A contract of method signatures a class promises to implement; since Java 8 it may also have default, static, and private methods.
+When should I use an abstract class instead of an interface? Use an abstract class to share state and partial implementation, and an interface to declare a capability that unrelated types can adopt.
+Can a Java class extend more than one class? No, single inheritance only, but a class may implement any number of interfaces.
+What is polymorphism? The ability to call the same method on different types and get behavior specific to the runtime type.
+What is the difference between overloading and overriding? Overloading is several methods sharing a name but differing in parameters, resolved at compile time; overriding replaces a superclass method and is resolved at runtime.
+What is encapsulation? Keeping state private and exposing behavior through methods so a class controls its own invariants.
+What is composition over inheritance? Preferring to hold a collaborator as a field rather than extending it, which keeps coupling loose and avoids fragile hierarchies.
+What is abstraction? Exposing what a type does while hiding how it does it.
+What are Java's access modifiers? private for the class only, package-private as the default, protected for the package plus subclasses, and public for everywhere.
+What does final mean? A final variable cannot be reassigned, a final method cannot be overridden, and a final class cannot be extended.
+What does static mean? The member belongs to the class itself rather than to any instance.
+What are this and super? this refers to the current instance, and super refers to the superclass's members or constructor.
+What is constructor chaining? Calling this(...) to reuse another constructor or super(...) to invoke the superclass constructor, always as the first statement.
+Are constructors inherited? No; a subclass must define its own and invoke a superclass constructor.
+What is the best way to write a singleton? An enum with a single constant, or a static holder class when lazy initialization is needed.
+What kinds of nested classes does Java have? Static nested classes, inner (non-static) classes, local classes, and anonymous classes.
+What is a lambda expression? A compact literal for an instance of a functional interface, written as parameters, an arrow, and a body.
+What is a functional interface? An interface with exactly one abstract method, optionally marked @FunctionalInterface so the compiler enforces it.
+What are the common built-in functional interfaces? Function, Supplier, Consumer, Predicate, BiFunction, and UnaryOperator in java.util.function.
+What is a method reference? A shorthand for a lambda that only calls an existing method, such as String::length.
+What is the Stream API? A declarative pipeline for processing sequences of elements with operations like filter, map, and reduce.
+What is the difference between intermediate and terminal stream operations? Intermediate operations are lazy and return a new stream; a terminal operation triggers execution and consumes the stream.
+What is the difference between map and flatMap? map transforms each element one-to-one, while flatMap flattens each element's nested stream into a single stream.
+What is a Collector? A recipe for accumulating a stream into a result, such as Collectors.toList() or Collectors.groupingBy().
+When should I use a parallel stream? Only for large, CPU-bound, stateless work over a splittable source; otherwise the coordination cost outweighs the gain.
+How is a stream different from a collection? A collection stores elements, while a stream describes a computation over them and can be consumed only once.
+What is Optional? A container that may hold a value, used as a return type to make absence explicit instead of returning null.
+How should Optional not be used? As a field, a method parameter, or a collection element; it is designed for return values.
+What is the Java Collections Framework? The standard interfaces and implementations for groups of objects: List, Set, Map, Queue, and Deque.
+What is the difference between ArrayList and LinkedList? ArrayList gives constant-time indexed access and better cache behavior; LinkedList only wins for heavy insertion and removal at the ends.
+What is the difference between HashMap, LinkedHashMap, and TreeMap? HashMap has no order, LinkedHashMap keeps insertion or access order, and TreeMap keeps keys sorted.
+What is the difference between HashSet, LinkedHashSet, and TreeSet? The same distinction as the maps they are built on: unordered, insertion-ordered, and sorted.
+How does HashMap work internally? Keys are hashed into buckets, and colliding entries form a linked list that converts to a balanced tree once a bucket grows past a threshold.
+What are capacity and load factor? Capacity is the size of the bucket array, and the load factor (0.75 by default) is the fill ratio that triggers resizing and rehashing.
+What is the difference between HashMap, Hashtable, and ConcurrentHashMap? Hashtable is a legacy fully synchronized class, HashMap is unsynchronized, and ConcurrentHashMap gives thread safety with fine-grained locking.
+Why should map keys be immutable? A mutated key changes its hash code, so the entry is stranded in the wrong bucket and can no longer be found.
+What is ConcurrentModificationException? The fail-fast error thrown when a collection is structurally modified during iteration; use the iterator's own remove() or a concurrent collection.
+What is the difference between Comparable and Comparator? Comparable defines a type's natural ordering inside the class, while Comparator defines an ordering externally and can be swapped per use.
+How do arrays differ from an ArrayList? Arrays are fixed-length, covariant, and can hold primitives; ArrayList grows on demand and holds only objects.
+What is the difference between List.of() and Arrays.asList()? List.of() returns a fully immutable list that rejects nulls, while Arrays.asList() returns a fixed-size view backed by the array that still allows set().
+What are generics? Compile-time type parameters that let a class or method work with many types while keeping type checking and avoiding casts.
+What is type erasure? The compiler removes generic type information after checking it, so at runtime a List of String is just a List.
+What are bounded types and wildcards? Bounds such as T extends Number constrain a type parameter, while the wildcards ? extends T and ? super T make APIs flexible in what they accept.
+What is PECS? Producer extends, consumer super: use ? extends T when reading from a structure and ? super T when writing into it.
+Why can't you create a generic array? Erasure would defeat the array's runtime type check, so new T[] is illegal; use a List or an unchecked cast from Object[] instead.
+What is the diamond operator? The empty angle brackets on the right-hand side of an assignment, letting the compiler infer the type arguments.
+What does the exception hierarchy look like? Throwable splits into Error for unrecoverable JVM problems and Exception, whose RuntimeException branch holds the unchecked exceptions.
+What is the difference between checked and unchecked exceptions? Checked exceptions must be caught or declared, while unchecked ones, the subclasses of RuntimeException, need not be.
+What is the difference between throw and throws? throw raises an exception instance, while throws declares which checked exceptions a method may propagate.
+Does finally always run? Almost always, including after a return; it is skipped only if the JVM exits or the thread dies first.
+What is try-with-resources? A try that declares AutoCloseable resources and closes them automatically in reverse order, even when the body fails.
+What is multi-catch? Catching several unrelated exception types in one clause, separated by a vertical bar.
+When should I create a custom exception? When callers need to react to a distinct failure mode that no standard exception expresses.
+What are the most common runtime exceptions? NullPointerException, ArrayIndexOutOfBoundsException, ClassCastException, NumberFormatException, IllegalArgumentException, and IllegalStateException.
+How do I avoid NullPointerException? Validate with Objects.requireNonNull, return empty collections or Optional instead of null, and prefer immutable, fully initialized objects.
+What is the difference between final, finally, and finalize? final is a modifier, finally is a block that always runs, and finalize() is a deprecated and removed cleanup hook you should never use.
+What is garbage collection? The JVM's automatic reclamation of heap objects that are no longer reachable from any live reference.
+What is the difference between the heap and the stack? The heap holds objects shared across threads, while each thread has its own stack of frames holding local variables and call state.
+What is generational garbage collection? The heap is split into a young generation collected often and cheaply and an old generation collected rarely, because most objects die young.
+Which garbage collectors does the JVM offer? Serial, Parallel, G1 as the default, and the low-pause collectors ZGC and Shenandoah.
+Can I force garbage collection? No; System.gc() is only a hint that the JVM is free to ignore.
+Can Java have memory leaks? Yes: objects that remain reachable but are never used again, typically through static collections, caches, or unremoved listeners.
+What is the difference between OutOfMemoryError and StackOverflowError? The first means the heap or another memory area is exhausted, and the second means a thread's stack was consumed, usually by unbounded recursion.
+What are strong, soft, weak, and phantom references? Decreasing levels of reachability that tell the collector how eagerly an object may be reclaimed; soft and weak references are used to build caches.
+What is a thread? An independent path of execution within a process, created by subclassing Thread or, preferably, by passing a Runnable.
+What are the thread states? NEW, RUNNABLE, BLOCKED, WAITING, TIMED_WAITING, and TERMINATED.
+What is the difference between start() and run()? start() launches a new thread that then calls run(), while calling run() directly just executes it on the current thread.
+What is synchronization? Guarding shared mutable state with a monitor, through a synchronized method or block, so only one thread enters at a time.
+What does volatile do? It guarantees the visibility and ordering of reads and writes to a field across threads, but not the atomicity of compound operations.
+What is the difference between volatile and synchronized? volatile only makes a single field's value visible, while synchronized also provides mutual exclusion over a block of work.
+What is a deadlock? Two or more threads each holding a lock the other needs; avoid it by acquiring locks in a consistent global order or by using timeouts.
+What is a race condition? A bug whose result depends on the unsynchronized interleaving of threads, such as a non-atomic check-then-act.
+How do wait(), notify(), and notifyAll() work? They coordinate threads on an object's monitor, may only be called while holding that monitor's lock, and should always be used from a loop that rechecks the condition.
+What is the difference between sleep() and wait()? sleep() pauses a thread while keeping its locks, whereas wait() releases the monitor and waits to be signalled.
+What is an ExecutorService? A managed thread pool that decouples task submission from thread creation, so you never hand-manage threads.
+What is the difference between Runnable and Callable? Callable returns a value and may throw a checked exception, and its result is retrieved through a Future.
+What is CompletableFuture? A composable future for asynchronous pipelines, chained with methods such as thenApply, thenCompose, and allOf.
+What are virtual threads? Lightweight JVM-scheduled threads, finalized in Java 21, that let straightforward blocking code scale to very large numbers of concurrent tasks.
+What are the atomic classes? Classes such as AtomicInteger and AtomicReference that provide lock-free compound operations through compare-and-swap.
+What is the difference between ReentrantLock and synchronized? ReentrantLock adds tryLock, timeouts, interruptibility, fairness, and multiple conditions, at the cost of an explicit unlock in a finally block.
+What is ThreadLocal? A variable with a separate value per thread; in pooled threads it must be cleared after use to avoid leaks.
+What is the Java Memory Model? The specification of when one thread's writes become visible to another, expressed through the happens-before relation.
+Is String thread-safe? Yes, because it is immutable and therefore safe to share without synchronization.
+How do I write an immutable class? Make the class final, make every field private and final, assign them in the constructor, expose no setters, and defensively copy mutable inputs and outputs.
+What is the difference between a shallow and a deep copy? A shallow copy shares the referenced objects while a deep copy duplicates them recursively; Object.clone() is shallow and is best replaced by a copy constructor.
+What is serialization? Converting an object graph into a byte stream, enabled by implementing Serializable, with transient marking the fields to skip.
+What is serialVersionUID? A version stamp on a Serializable class; if it does not match during deserialization the JVM throws InvalidClassException.
+Why avoid Java's built-in serialization? It is a well-known source of security vulnerabilities and rigid coupling, so explicit formats such as JSON are preferred.
+What is reflection? The ability to inspect and invoke classes, methods, and fields at runtime; it powers frameworks but costs performance and breaks encapsulation.
+What are annotations? Metadata attached to code, such as @Override or @Deprecated, that tools and frameworks read at compile time or at runtime.
+What is the classpath? The list of directories and JARs where the compiler and the JVM look for classes and resources.
+What is the Java Platform Module System? The Java 9 module system in which module-info.java declares a module's dependencies and the packages it exports.
+What is a JAR file? A zip-format archive bundling classes and resources, optionally with a manifest naming a main class.
+What is a package? A namespace that groups related types and shapes the directory layout, declared with the package statement.
+What does an import statement do? It lets you refer to a type by its simple name; a static import does the same for static members.
+What are Maven and Gradle? Build tools that manage dependencies, compilation, testing, and packaging; Maven is XML and convention-driven, while Gradle is script-based and incremental.
+What is Javadoc? The tool and comment format, using tags such as @param and @return, that generates API documentation from source comments.
+What is JUnit? The standard Java testing framework, in which tests are methods marked @Test that use assertions to verify behavior.
+What is mocking? Replacing a real collaborator with a stand-in that returns scripted results, typically through a library such as Mockito, in order to isolate the unit under test.
+What is JDBC? The low-level standard API for connecting Java to relational databases, built around Connection, PreparedStatement, and ResultSet.
+What are an ORM and JPA? An object-relational mapper maps classes to database tables; JPA is the Java standard for that, and Hibernate is its best-known implementation.
+What is Spring Boot? An opinionated framework built on Spring that autoconfigures dependency injection, web, and data layers so an application starts with minimal setup.
+What is the difference between Java SE and Jakarta EE? Java SE is the core platform, while Jakarta EE, formerly Java EE, adds enterprise specifications such as servlets, JPA, and CDI on top of it.
+What is java.nio.file? The modern file API, whose Path and Files types replace the older File class for reading, writing, and walking the file system.
+How do I read a text file? Files.readString(path) for a small file, or Files.lines(path) inside try-with-resources to stream a large one.
+What is java.time? The modern date and time API, including LocalDate, LocalDateTime, Instant, and Duration, which replaced the mutable and error-prone Date and Calendar.
+Why use BigDecimal for money? Because binary floating point cannot represent decimal fractions exactly, so double accumulates rounding errors in currency arithmetic.
+What happens on integer overflow? It wraps around silently; use Math.addExact and its relatives to get an ArithmeticException instead.
+How does Java represent characters? char is a 16-bit UTF-16 code unit, so characters beyond the basic plane occupy two chars and must be handled with code-point methods.
+What are varargs? A parameter declared with an ellipsis that lets a caller pass any number of arguments, received inside the method as an array.
+How do I read console input? Wrap a Scanner around System.in, or use a BufferedReader over an InputStreamReader for larger input.
+What are Java's naming conventions? PascalCase for classes, camelCase for methods and variables, UPPER_SNAKE_CASE for constants, and lowercase dotted names for packages.
+Which methods does every object inherit? equals(), hashCode(), toString(), getClass(), and the wait and notify family, all from Object.
+What is the java.lang package? The core package, imported automatically, containing String, Math, Object, the primitive wrappers, and the base exception types.
+What are the most useful recent Java features? Records, sealed types, pattern matching for switch, text blocks, switch expressions, and virtual threads.

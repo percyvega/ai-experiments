@@ -1,25 +1,27 @@
 package com.percyvega.langchain4j;
 
-import dev.langchain4j.data.message.SystemMessage;
-import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.memory.ChatMemory;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.chat.response.ChatResponse;
 import dev.langchain4j.service.AiServices;
+import dev.langchain4j.service.SystemMessage;
+import dev.langchain4j.service.UserMessage;
+import dev.langchain4j.service.V;
 
 import static com.percyvega.utils.Constants.COMMAND_PROMPT;
 import static com.percyvega.utils.Constants.SYSTEM_MESSAGE_TEXT;
 
-class T5Chatbot {
+class LC7ChatbotWithAnnotations {
 
     private static final ChatModel CHAT_MODEL = ChatModelFactory.getAnthropic();
-    private static final SystemMessage SYSTEM_MESSAGE = new SystemMessage(SYSTEM_MESSAGE_TEXT);
 
     private final ChatMemory CHAT_MEMORY = MessageWindowChatMemory.withMaxMessages(10);
 
     public interface MyChatBot {
-        ChatResponse sendUserMessage(UserMessage userMessage);
+        @SystemMessage(SYSTEM_MESSAGE_TEXT)
+        @UserMessage("In one short sentence, {{userInput}}")
+        ChatResponse sendUserMessage(@V("userInput") String userInput);
     }
 
     private final MyChatBot myChatBot = AiServices.builder(MyChatBot.class)
@@ -28,12 +30,8 @@ class T5Chatbot {
             .build();
 
     void main() {
-        CHAT_MEMORY.add(SYSTEM_MESSAGE);
-
         for (String userInput = IO.readln(COMMAND_PROMPT); !userInput.isEmpty(); userInput = IO.readln(COMMAND_PROMPT)) {
-            UserMessage userMessage = UserMessage.from(userInput);
-
-            ChatResponse chatResponse = myChatBot.sendUserMessage(userMessage);
+            ChatResponse chatResponse = myChatBot.sendUserMessage(userInput);
             IO.println(chatResponse);
         }
     }

@@ -2,10 +2,10 @@
 
 A personal sandbox for calling LLM providers from Java, in two flavors:
 
-- **`raw`** — direct HTTP via `java.net.http.HttpClient` and Jackson, no SDK. Shows what the providers' wire formats actually look like.
+- **`plain`** — direct HTTP via `java.net.http.HttpClient` and Jackson, no SDK. Shows what the providers' wire formats actually look like.
 - **`langchain4j`** — the same providers through [LangChain4j](https://docs.langchain4j.dev/), then further into memory, AI Services, streaming, and embeddings.
 
-The `langchain4j` experiments are numbered `T1` … `T10` and are meant to be read in order — each one adds a single idea to the one before it.
+The `langchain4j` experiments are numbered `LC2` … `LC11` and are meant to be read in order — each one adds a single idea to the one before it.
 
 ## Providers
 
@@ -25,7 +25,8 @@ Model names, temperature, max tokens, timeout, and the default prompts all live 
 - JDK 25 (`maven.compiler.release=25`). The interactive experiments use Java 25 instance `main()` methods and the implicit `IO` class, so an older JDK will not compile them.
 - Maven 3.9+
 - macOS — API keys are read from the macOS keychain (see below)
-- [Ollama](https://ollama.com/) on port `11434` if you want the local provider
+- [Ollama](https://ollama.com/) on port `11434` if you want the local provider — `scripts/start-ollama.sh` and `scripts/stop-ollama.sh` bring it up and down
+- Lombok supplies the `@Log4j2` loggers. JDK 23 dropped implicit annotation processing, so the pom names Lombok in `<annotationProcessorPaths>`; in an IDE, make sure annotation processing is enabled
 
 ## API keys
 
@@ -46,41 +47,41 @@ There is no `Main`. Every experiment lives under `src/test/java`, and there are 
 **JUnit tests** — run with Maven or from the IDE:
 
 ```sh
-mvn test                        # RawTest, T1, T2
-mvn test -Dtest=T1UserMessageTest
-mvn test -Dtest=T8Embedding     # T8 needs naming explicitly; see below
+mvn test                        # PlainTest, LC2, LC3
+mvn test -Dtest=LC2UserMessageTest
+mvn test -Dtest=LC9Embedding     # LC9 needs naming explicitly; see below
 ```
 
-One wrinkle: Surefire only picks up classes matching `Test*` / `*Test` / `*Tests` / `*TestCase`, and the pom does not override that. `T8Embedding` is a real `@Test` but its name matches none of those, so a bare `mvn test` **silently skips it**. Run it from the IDE, name it with `-Dtest=`, or rename the class if you want it in the default run.
+One wrinkle: Surefire only picks up classes matching `Test*` / `*Test` / `*Tests` / `*TestCase`, and the pom does not override that. `LC9Embedding` is a real `@Test` but its name matches none of those, so a bare `mvn test` **silently skips it**. Run it from the IDE, name it with `-Dtest=`, or rename the class if you want it in the default run.
 
 **Interactive `main()` methods** — these read from the console, which a test runner does not give you, so run them from the IDE (green gutter arrow) rather than through `mvn test`. Enter an empty line to quit.
 
 | Experiment                   | Kind        | What it shows                                                                                   |
 |------------------------------|-------------|-------------------------------------------------------------------------------------------------|
-| `raw/RawTest`                | JUnit       | Each `*HelperImpl.INSTANCE` over plain HTTP; pretty-prints the raw JSON response                  |
-| `T1UserMessageTest`          | JUnit       | The smallest thing that works: one string prompt to each `ChatModel`                             |
-| `T2SystemAndUserMessagesTest`| JUnit       | A `SystemMessage` + `UserMessage` list instead of a bare string                                  |
-| `T3Chatting`                 | Interactive | A prompt loop — and the demonstration that, with no memory, the model forgets every turn         |
-| `T4ChattingWithMemory`       | Interactive | `MessageWindowChatMemory` (10 messages), fed and updated by hand                                 |
-| `T5Chatbot`                  | Interactive | The same thing via `AiServices` — declare an interface, let LangChain4j wire the memory          |
-| `T6ChatbotWithAnnotations`   | Interactive | `@SystemMessage` / `@UserMessage` / `@V` prompt templating on the interface                      |
-| `T7ChatbotStreaming`         | Interactive | `StreamingChatModel` + `TokenStream`, printing partial responses as they arrive                  |
-| `T8Embedding`                | JUnit\*     | What an embedding *is* — log the raw vector for one sentence                                     |
-| `T9CompareEmbeddings`        | Interactive | Hand-rolled retrieval: cosine vs. euclidean similarity over the sentences of a text file          |
-| `T10EmbeddingStore`          | Interactive | The same retrieval, but with LangChain4j's `InMemoryEmbeddingStore` and its scoring               |
+| `plain/PlainTest`            | JUnit       | Each `*HelperImpl.INSTANCE` over plain HTTP; pretty-prints the raw JSON response                  |
+| `LC2UserMessageTest`         | JUnit       | The smallest thing that works: one string prompt to each `ChatModel`                             |
+| `LC3SystemAndUserMessagesTest`| JUnit       | A `SystemMessage` + `UserMessage` list instead of a bare string                                  |
+| `LC4Chatting`                | Interactive | A prompt loop — and the demonstration that, with no memory, the model forgets every turn         |
+| `LC5ChattingWithMemory`       | Interactive | `MessageWindowChatMemory` (10 messages), fed and updated by hand                                 |
+| `LC6Chatbot`                  | Interactive | The same thing via `AiServices` — declare an interface, let LangChain4j wire the memory          |
+| `LC7ChatbotWithAnnotations`   | Interactive | `@SystemMessage` / `@UserMessage` / `@V` prompt templating on the interface                      |
+| `LC8ChatbotStreaming`         | Interactive | `StreamingChatModel` + `TokenStream`, printing partial responses as they arrive                  |
+| `LC9Embedding`               | JUnit\*     | What an embedding *is* — log the raw vector for one sentence                                     |
+| `LC10CompareEmbeddings`       | Interactive | Hand-rolled retrieval: cosine vs. euclidean similarity over the sentences of a text file          |
+| `LC11EmbeddingStore`         | Interactive | The same retrieval, but with LangChain4j's `InMemoryEmbeddingStore` and its scoring               |
 
-\* `T8` is a `@Test`, but not one `mvn test` finds on its own — see the naming note above.
+\* `LC9` is a `@Test`, but not one `mvn test` finds on its own — see the naming note above.
 
-`T9` and `T10` both embed `src/test/resources/introduction-to-java.txt` at startup, then let you ask questions against it and show the three closest sentences.
+`LC10` and `LC11` both embed `src/test/resources/introduction-to-java.txt` at startup, then let you ask questions against it and show the closest matches. That file is 150 short Java Q&A pairs, one per line; `FileUtils.getSentences` splits on sentence boundaries, so each question and its answer become separate chunks — which is why a typed question tends to match a stored question almost exactly.
 
-Note that parallel test execution is currently **disabled** — the settings in `src/test/resources/junit-platform.properties` are commented out. Uncomment them to make the four provider methods in `RawTest` / `T1` / `T2` fan out concurrently; the log pattern includes `[%t]` so you can tell the threads apart.
+Parallel execution is enabled but **opt-in**. `src/test/resources/junit-platform.properties` turns the engine on while leaving both default modes at `same_thread`, so only a class annotated `@Execution(ExecutionMode.CONCURRENT)` fans out — currently `LC2UserMessageTest` and `LC3SystemAndUserMessagesTest`, whose four provider methods run across a fixed pool of 4. `GooglePlainTest` stays sequential. The log pattern includes `[%t]` so you can tell the threads apart.
 
 ## Architecture
 
-### `raw` — template-method hierarchy
+### `plain` — template-method hierarchy
 
 - `ModelHelper` — the public interface: `getModelResponse(String)` returns the provider's raw JSON, `extractPromptResponse(String)` digs the assistant's text back out of it.
-- `AbstractModelHelper` — owns the shared `HttpClient` plumbing and the non-200 handling; both interface methods are `final` here. Subclasses fill in three `protected abstract` hooks: `getHttpRequest(String)`, `getBody(String)`, and `getPromptResponsePath()`.
+- `AbstractModelHelper` — owns the shared `HttpClient` plumbing and the non-200 handling; both interface methods are `final` here. Subclasses fill in three `protected abstract` hooks: `getHttpRequest(String)`, `getRequestPayload(String)`, and `getPromptResponseJsonPointer()`.
 - `impl/*HelperImpl` — one `final class` per provider, with a private constructor and a `public static final ModelHelper INSTANCE`. `INSTANCE` is deliberately typed as the interface, not the concrete class, so autocomplete on it stays small.
 
 The interesting part is the diff between providers: Google nests `contents`/`parts` where the others use `messages`, and each one buries the reply at a different JSON pointer (`/content/0/text` for Anthropic, `/candidates/0/content/parts/0/text` for Google, `/choices/0/message/content` for OpenAI and Ollama — Ollama being served through its OpenAI-compatible endpoint).
@@ -90,13 +91,23 @@ Adding a provider: extend `AbstractModelHelper`, implement the three `protected`
 ### `langchain4j` — factories
 
 - `ChatModelFactory` — `getAnthropic()` / `getOpenAi()` / `getGoogle()` / `getOllama()`, each returning a fresh `ChatModel`.
-- `StreamingChatModelFactory` — the same four, returning `StreamingChatModel` (used by `T7`).
+- `StreamingChatModelFactory` — the same four, returning `StreamingChatModel` (used by `LC8`).
 - `EmbeddingModelFactory` — `getOpenAi()`, returning an `EmbeddingModel`.
 
-### `utils`
+### Utilities
+
+Each helper sits next to the approach that uses it; `com.percyvega.utils` holds only what both need.
+
+`com.percyvega.utils` — shared:
 
 - `Constants` — model names, temperature, max tokens, timeout, default system/user prompts.
 - `ApiKeys` — keychain lookups (`openAI()`, `anthropic()`, `google()`).
-- `JsonUtils` — `formatAsJson` (pretty-print) and `getValue` (JSON-pointer extraction).
+
+`com.percyvega.plain.util` — plain HTTP only:
+
+- `JsonUtils` — `formatAsJson` (pretty-print) and `getValue` (JSON-pointer extraction). LangChain4j does its own parsing, so only `plain` needs this.
+
+`com.percyvega.langchain4j.util` — framework side only:
+
 - `FileUtils` — `getSentences(fileName)`, splitting a classpath resource into sentences with `BreakIterator` rather than on `"."`.
 - `EmbeddingUtils` — `getEmbedding` / `getEmbeddings` (one batched `embedAll` call, duplicates dropped first) plus `cosineSimilarity` and `euclideanSimilarity`, each documented with the range it actually lands in.

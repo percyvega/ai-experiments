@@ -1,4 +1,4 @@
-package com.percyvega.raw;
+package com.percyvega.plain;
 
 public interface ModelHelper {
 

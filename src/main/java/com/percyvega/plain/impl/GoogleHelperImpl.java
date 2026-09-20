@@ -1,7 +1,7 @@
-package com.percyvega.raw.impl;
+package com.percyvega.plain.impl;
 
-import com.percyvega.raw.AbstractModelHelper;
-import com.percyvega.raw.ModelHelper;
+import com.percyvega.plain.AbstractModelHelper;
+import com.percyvega.plain.ModelHelper;
 import com.percyvega.utils.ApiKeys;
 
 import java.net.URI;
@@ -22,12 +22,12 @@ public final class GoogleHelperImpl extends AbstractModelHelper {
                 .uri(URI.create("https://generativelanguage.googleapis.com/v1beta/models/" + GOOGLE_AI_MODEL_NAME + ":generateContent"))
                 .header("Content-Type", "application/json")
                 .header("x-goog-api-key", ApiKeys.google())
-                .POST(HttpRequest.BodyPublishers.ofString(getBody(prompt)))
+                .POST(HttpRequest.BodyPublishers.ofString(getRequestPayload(prompt)))
                 .build();
     }
 
     @Override
-    protected String getBody(String prompt) {
+    protected String getRequestPayload(String prompt) {
         return """
                 {
                     "systemInstruction": {
@@ -51,7 +51,7 @@ public final class GoogleHelperImpl extends AbstractModelHelper {
     }
 
     @Override
-    public String getPromptResponsePath() {
+    protected String getPromptResponseJsonPointer() {
         return "/candidates/0/content/parts/0/text";
     }
 }

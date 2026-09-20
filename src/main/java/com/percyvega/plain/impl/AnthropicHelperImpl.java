@@ -1,7 +1,7 @@
-package com.percyvega.raw.impl;
+package com.percyvega.plain.impl;
 
-import com.percyvega.raw.AbstractModelHelper;
-import com.percyvega.raw.ModelHelper;
+import com.percyvega.plain.AbstractModelHelper;
+import com.percyvega.plain.ModelHelper;
 import com.percyvega.utils.ApiKeys;
 
 import java.net.URI;
@@ -23,12 +23,12 @@ public final class AnthropicHelperImpl extends AbstractModelHelper {
                 .header("Content-Type", "application/json")
                 .header("x-api-key", ApiKeys.anthropic())
                 .header("anthropic-version", "2023-06-01")
-                .POST(HttpRequest.BodyPublishers.ofString(getBody(prompt)))
+                .POST(HttpRequest.BodyPublishers.ofString(getRequestPayload(prompt)))
                 .build();
     }
 
     @Override
-    protected String getBody(String prompt) {
+    protected String getRequestPayload(String prompt) {
         return """
                 {
                     "model": "%s",
@@ -46,7 +46,7 @@ public final class AnthropicHelperImpl extends AbstractModelHelper {
     }
 
     @Override
-    public String getPromptResponsePath() {
+    protected String getPromptResponseJsonPointer() {
         return "/content/0/text";
     }
 }
