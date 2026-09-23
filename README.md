@@ -25,7 +25,7 @@ Model names, temperature, max tokens, timeout, and the default prompts all live 
 - JDK 25 (`maven.compiler.release=25`). The interactive experiments use Java 25 instance `main()` methods and the implicit `IO` class, so an older JDK will not compile them.
 - Maven 3.9+
 - macOS — API keys are read from the macOS keychain (see below)
-- [Ollama](https://ollama.com/) on port `11434` if you want the local provider — `scripts/start-ollama.sh` and `scripts/stop-ollama.sh` bring it up and down
+- [Ollama](https://ollama.com/) on port `11434` if you want the local provider — start it with `ollama serve` and pull the model named by `MISTRAL_AI_MODEL_NAME` in `Constants`
 - Lombok supplies the `@Log4j2` loggers. JDK 23 dropped implicit annotation processing, so the pom names Lombok in `<annotationProcessorPaths>`; in an IDE, make sure annotation processing is enabled
 
 ## API keys
