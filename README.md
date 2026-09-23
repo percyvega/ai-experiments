@@ -5,7 +5,7 @@ A personal sandbox for calling LLM providers from Java, in two flavors:
 - **`plain`** — direct HTTP via `java.net.http.HttpClient` and Jackson, no SDK. Shows what the providers' wire formats actually look like.
 - **`langchain4j`** — the same providers through [LangChain4j](https://docs.langchain4j.dev/), then further into memory, AI Services, streaming, and embeddings.
 
-The `langchain4j` experiments are numbered `LC2` … `LC11` and are meant to be read in order — each one adds a single idea to the one before it.
+The `langchain4j` experiments are numbered `LC1` … `LC12` and are meant to be read in order — each one adds a single idea to the one before it.
 
 ## Providers
 
@@ -47,34 +47,34 @@ There is no `Main`. Every experiment lives under `src/test/java`, and there are 
 **JUnit tests** — run with Maven or from the IDE:
 
 ```sh
-mvn test                        # PlainTest, LC2, LC3
-mvn test -Dtest=LC2UserMessageTest
-mvn test -Dtest=LC9Embedding     # LC9 needs naming explicitly; see below
+mvn test                        # PlainTest, LC3, LC4
+mvn test -Dtest=LC3UserMessageTest
+mvn test -Dtest=LC10Embedding     # LC10 needs naming explicitly; see below
 ```
 
-One wrinkle: Surefire only picks up classes matching `Test*` / `*Test` / `*Tests` / `*TestCase`, and the pom does not override that. `LC9Embedding` is a real `@Test` but its name matches none of those, so a bare `mvn test` **silently skips it**. Run it from the IDE, name it with `-Dtest=`, or rename the class if you want it in the default run.
+One wrinkle: Surefire only picks up classes matching `Test*` / `*Test` / `*Tests` / `*TestCase`, and the pom does not override that. `LC10Embedding` is a real `@Test` but its name matches none of those, so a bare `mvn test` **silently skips it**. Run it from the IDE, name it with `-Dtest=`, or rename the class if you want it in the default run.
 
 **Interactive `main()` methods** — these read from the console, which a test runner does not give you, so run them from the IDE (green gutter arrow) rather than through `mvn test`. Enter an empty line to quit.
 
 | Experiment                   | Kind        | What it shows                                                                                   |
 |------------------------------|-------------|-------------------------------------------------------------------------------------------------|
 | `plain/PlainTest`            | JUnit       | Each `*HelperImpl.INSTANCE` over plain HTTP; pretty-prints the raw JSON response                  |
-| `LC2UserMessageTest`         | JUnit       | The smallest thing that works: one string prompt to each `ChatModel`                             |
-| `LC3SystemAndUserMessagesTest`| JUnit       | A `SystemMessage` + `UserMessage` list instead of a bare string                                  |
-| `LC4Chatting`                | Interactive | A prompt loop — and the demonstration that, with no memory, the model forgets every turn         |
-| `LC5ChattingWithMemory`       | Interactive | `MessageWindowChatMemory` (10 messages), fed and updated by hand                                 |
-| `LC6Chatbot`                  | Interactive | The same thing via `AiServices` — declare an interface, let LangChain4j wire the memory          |
-| `LC7ChatbotWithAnnotations`   | Interactive | `@SystemMessage` / `@UserMessage` / `@V` prompt templating on the interface                      |
-| `LC8ChatbotStreaming`         | Interactive | `StreamingChatModel` + `TokenStream`, printing partial responses as they arrive                  |
-| `LC9Embedding`               | JUnit\*     | What an embedding *is* — log the raw vector for one sentence                                     |
-| `LC10CompareEmbeddings`       | Interactive | Hand-rolled retrieval: cosine vs. euclidean similarity over the sentences of a text file          |
-| `LC11EmbeddingStore`         | Interactive | The same retrieval, but with LangChain4j's `InMemoryEmbeddingStore` and its scoring               |
+| `LC3UserMessageTest`         | JUnit       | The smallest thing that works: one string prompt to each `ChatModel`                             |
+| `LC4SystemAndUserMessagesTest`| JUnit       | A `SystemMessage` + `UserMessage` list instead of a bare string                                  |
+| `LC5Chatting`                | Interactive | A prompt loop — and the demonstration that, with no memory, the model forgets every turn         |
+| `LC6ChattingWithMemory`       | Interactive | `MessageWindowChatMemory` (10 messages), fed and updated by hand                                 |
+| `LC7Chatbot`                  | Interactive | The same thing via `AiServices` — declare an interface, let LangChain4j wire the memory          |
+| `LC8ChatbotWithAnnotations`   | Interactive | `@SystemMessage` / `@UserMessage` / `@V` prompt templating on the interface                      |
+| `LC9ChatbotStreaming`         | Interactive | `StreamingChatModel` + `TokenStream`, printing partial responses as they arrive                  |
+| `LC10Embedding`               | JUnit\*     | What an embedding *is* — log the raw vector for one sentence                                     |
+| `LC11CompareEmbeddings`       | Interactive | Hand-rolled retrieval: cosine vs. euclidean similarity over the sentences of a text file          |
+| `LC12EmbeddingStore`         | Interactive | The same retrieval, but with LangChain4j's `InMemoryEmbeddingStore` and its scoring               |
 
-\* `LC9` is a `@Test`, but not one `mvn test` finds on its own — see the naming note above.
+\* `LC10` is a `@Test`, but not one `mvn test` finds on its own — see the naming note above.
 
-`LC10` and `LC11` both embed `src/test/resources/introduction-to-java.txt` at startup, then let you ask questions against it and show the closest matches. That file is 150 short Java Q&A pairs, one per line; `FileUtils.getSentences` splits on sentence boundaries, so each question and its answer become separate chunks — which is why a typed question tends to match a stored question almost exactly.
+`LC11` and `LC12` both embed `src/test/resources/introduction-to-java.txt` at startup, then let you ask questions against it and show the closest matches. That file is 150 short Java Q&A pairs, one per line; `FileUtils.getSentences` splits on sentence boundaries, so each question and its answer become separate chunks — which is why a typed question tends to match a stored question almost exactly.
 
-Parallel execution is enabled but **opt-in**. `src/test/resources/junit-platform.properties` turns the engine on while leaving both default modes at `same_thread`, so only a class annotated `@Execution(ExecutionMode.CONCURRENT)` fans out — currently `LC2UserMessageTest` and `LC3SystemAndUserMessagesTest`, whose four provider methods run across a fixed pool of 4. `GooglePlainTest` stays sequential. The log pattern includes `[%t]` so you can tell the threads apart.
+Parallel execution is enabled but **opt-in**. `src/test/resources/junit-platform.properties` turns the engine on while leaving both default modes at `same_thread`, so only a class annotated `@Execution(ExecutionMode.CONCURRENT)` fans out — currently `LC3UserMessageTest` and `LC4SystemAndUserMessagesTest`, whose four provider methods run across a fixed pool of 4. `P1GoogleTest` stays sequential. The log pattern includes `[%t]` so you can tell the threads apart.
 
 ## Architecture
 
@@ -91,7 +91,7 @@ Adding a provider: extend `AbstractModelHelper`, implement the three `protected`
 ### `langchain4j` — factories
 
 - `ChatModelFactory` — `getAnthropic()` / `getOpenAi()` / `getGoogle()` / `getOllama()`, each returning a fresh `ChatModel`.
-- `StreamingChatModelFactory` — the same four, returning `StreamingChatModel` (used by `LC8`).
+- `StreamingChatModelFactory` — the same four, returning `StreamingChatModel` (used by `LC9`).
 - `EmbeddingModelFactory` — `getOpenAi()`, returning an `EmbeddingModel`.
 
 ### Utilities

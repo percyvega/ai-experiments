@@ -11,7 +11,7 @@ import java.util.concurrent.CompletableFuture;
 import static com.percyvega.utils.Constants.COMMAND_PROMPT;
 import static com.percyvega.utils.Constants.SYSTEM_MESSAGE_TEXT;
 
-class LC8ChatbotStreaming {
+class LC9ChatbotStreaming {
 
     private static final StreamingChatModel CHAT_MODEL = StreamingChatModelFactory.getAnthropic();
 

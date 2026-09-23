@@ -16,7 +16,7 @@ import static com.percyvega.utils.Constants.USER_MESSAGE_TEXT;
 
 @Log4j2
 @Execution(ExecutionMode.CONCURRENT)
-class LC3SystemAndUserMessagesTest {
+class LC4SystemAndUserMessagesTest {
 
     private static final SystemMessage SYSTEM_MESSAGE = new SystemMessage(SYSTEM_MESSAGE_TEXT);
     private static final UserMessage USER_MESSAGE = new UserMessage(USER_MESSAGE_TEXT);

@@ -7,7 +7,7 @@ import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 
 @Log4j2
-class LC9Embedding {
+class LC10Embedding {
 
     private static final EmbeddingModel EMBEDDING_MODEL = EmbeddingModelFactory.getOpenAi();
 

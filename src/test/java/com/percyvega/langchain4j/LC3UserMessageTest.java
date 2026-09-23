@@ -11,7 +11,7 @@ import static com.percyvega.utils.Constants.USER_MESSAGE_TEXT;
 
 @Log4j2
 @Execution(ExecutionMode.CONCURRENT)
-class LC2UserMessageTest {
+class LC3UserMessageTest {
 
     private static final UserMessage USER_MESSAGE = new UserMessage(USER_MESSAGE_TEXT);
 

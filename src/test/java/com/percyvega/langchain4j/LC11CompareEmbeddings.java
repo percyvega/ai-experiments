@@ -12,7 +12,7 @@ import java.util.Map;
 import static com.percyvega.langchain4j.util.EmbeddingUtils.*;
 
 @Log4j2
-class LC10CompareEmbeddings {
+class LC11CompareEmbeddings {
 
     public static final String FILE_NAME = "/introduction-to-java.txt";
 

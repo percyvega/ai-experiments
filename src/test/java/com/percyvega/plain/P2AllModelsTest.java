@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.percyvega.utils.Constants.USER_MESSAGE_TEXT;
 
-class GenericPlainTest {
+class P2AllModelsTest {
 
     @Test
     void anthropic() {

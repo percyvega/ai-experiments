@@ -11,7 +11,7 @@ import java.util.List;
 import static com.percyvega.utils.Constants.COMMAND_PROMPT;
 import static com.percyvega.utils.Constants.SYSTEM_MESSAGE_TEXT;
 
-class LC4Chatting {
+class LC5Chatting {
 
     private static final ChatModel CHAT_MODEL = ChatModelFactory.getGoogle();
     private static final SystemMessage SYSTEM_MESSAGE = new SystemMessage(SYSTEM_MESSAGE_TEXT);

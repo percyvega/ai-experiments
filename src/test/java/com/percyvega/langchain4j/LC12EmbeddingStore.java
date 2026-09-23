@@ -13,7 +13,7 @@ import lombok.extern.log4j.Log4j2;
 import java.util.List;
 
 @Log4j2
-class LC11EmbeddingStore {
+class LC12EmbeddingStore {
 
     public static final String FILE_NAME = "/introduction-to-java.txt";
 

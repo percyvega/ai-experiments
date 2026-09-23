@@ -1,6 +1,5 @@
 package com.percyvega.plain;
 
-import com.percyvega.plain.util.JsonUtils;
 import com.percyvega.utils.ApiKeys;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +12,7 @@ import java.time.Duration;
 
 import static com.percyvega.utils.Constants.*;
 
-class GooglePlainTest {
+class P1GoogleTest {
 
     @Test
     void google() {
