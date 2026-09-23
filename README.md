@@ -9,8 +9,8 @@ The `langchain4j` experiments are numbered `LC1` … `LC12` and are meant to be 
 
 ## Providers
 
-| Provider  | Chat model              | Notes                                |
-|-----------|-------------------------|--------------------------------------|
+| Provider  | Chat model              | Notes                                 |
+|-----------|-------------------------|---------------------------------------|
 | Anthropic | `CLAUDE_SONNET_4_6`     | temperature halved (its range is 0–1) |
 | OpenAI    | `GPT_4_1`               | also the embedding provider           |
 | Google    | `gemini-2.5-flash-lite` |                                       |
@@ -59,9 +59,9 @@ One wrinkle: Surefire only picks up classes matching `Test*` / `*Test` / `*Tests
 | Experiment                   | Kind        | What it shows                                                                                   |
 |------------------------------|-------------|-------------------------------------------------------------------------------------------------|
 | `P1GoogleTest`               | JUnit       | One provider, no abstractions: a hand-built `HttpClient` call to Google, printing the raw body    |
-| `P2AllModelsTest`            | JUnit       | Each `*HelperImpl.INSTANCE` over plain HTTP; pretty-prints the raw JSON response                  |
-| `LC1GoogleTest`              | JUnit       | The same first contact through LangChain4j: a `GoogleAiGeminiChatModel` built inline              |
-| `LC2UserMessageTextTest`     | JUnit       | The smallest thing that works: one string prompt to each `ChatModel`, via `ChatModelFactory`      |
+| `P2AllModelsRefactoredTest`            | JUnit       | Each `*HelperImpl.INSTANCE` over plain HTTP; pretty-prints the raw JSON response                  |
+| `LC1GoogleUserTextTest`              | JUnit       | The same first contact through LangChain4j: a `GoogleAiGeminiChatModel` built inline              |
+| `LC2AllModelsUserTextTest`     | JUnit       | The smallest thing that works: one string prompt to each `ChatModel`, via `ChatModelFactory`      |
 | `LC3UserMessageTest`         | JUnit       | The same prompt wrapped in a `UserMessage` instead of passed as a bare string                    |
 | `LC4SystemAndUserMessagesTest`| JUnit       | A `SystemMessage` + `UserMessage` list instead of a bare string                                  |
 | `LC5Chatting`                | Interactive | A prompt loop — and the demonstration that, with no memory, the model forgets every turn         |
@@ -77,7 +77,7 @@ One wrinkle: Surefire only picks up classes matching `Test*` / `*Test` / `*Tests
 
 `LC11` and `LC12` both embed `src/test/resources/introduction-to-java.txt` at startup, then let you ask questions against it and show the closest matches. That file is 150 short Java Q&A pairs, one per line; `FileUtils.getSentences` splits on sentence boundaries, so each question and its answer become separate chunks — which is why a typed question tends to match a stored question almost exactly.
 
-Parallel execution is enabled but **opt-in**. `src/test/resources/junit-platform.properties` turns the engine on while leaving both default modes at `same_thread`, so only a class annotated `@Execution(ExecutionMode.CONCURRENT)` fans out — currently `LC2UserMessageTextTest`, `LC3UserMessageTest`, and `LC4SystemAndUserMessagesTest`, whose four provider methods run across a fixed pool of 4. `P1GoogleTest`, `P2AllModelsTest`, and `LC1GoogleTest` stay sequential. The log pattern includes `[%t]` so you can tell the threads apart.
+Parallel execution is enabled but **opt-in**. `src/test/resources/junit-platform.properties` turns the engine on while leaving both default modes at `same_thread`, so only a class annotated `@Execution(ExecutionMode.CONCURRENT)` fans out — currently `LC2AllModelsUserTextTest`, `LC3UserMessageTest`, and `LC4SystemAndUserMessagesTest`, whose four provider methods run across a fixed pool of 4. `P1GoogleTest`, `P2AllModelsRefactoredTest`, and `LC1GoogleUserTextTest` stay sequential. The log pattern includes `[%t]` so you can tell the threads apart.
 
 ## Architecture
 

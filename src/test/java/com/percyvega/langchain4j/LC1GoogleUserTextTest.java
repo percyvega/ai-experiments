@@ -11,7 +11,7 @@ import static com.percyvega.utils.Constants.*;
 import static com.percyvega.utils.Constants.MAX_TOKENS;
 import static com.percyvega.utils.Constants.TIMEOUT_SECONDS;
 
-class LC1GoogleTest {
+class LC1GoogleUserTextTest {
 
     @Test
     void google() {
