@@ -15,8 +15,8 @@ There is no `Main`; experiments are driven from `src/test/java/...`. The `langch
 
 - Java 25 toolchain (set via `maven.compiler.release=25` in `pom.xml`); requires `JAVA_HOME` pointing at a JDK 25. The interactive classes rely on Java 25 instance `main()` methods and the implicit `IO` class.
 - `mvn compile` — build.
-- `mvn test` — runs `P1GoogleTest`, `LC3UserMessageTest`, and `LC4SystemAndUserMessagesTest` only. Most `LC*` classes are interactive `main()` methods, not tests; and `LC10Embedding` *is* a `@Test` but its class name matches none of Surefire's default includes (`Test*`, `*Test`, `*Tests`, `*TestCase`), which the pom does not override — so it is skipped unless named via `-Dtest=LC10Embedding` or run from the IDE.
-- Parallel execution is enabled but **opt-in**: `src/test/resources/junit-platform.properties` switches the engine on yet leaves `mode.default` and `mode.classes.default` at `same_thread`, so only a class carrying `@Execution(ExecutionMode.CONCURRENT)` fans out. `LC3UserMessageTest` and `LC4SystemAndUserMessagesTest` carry it; `P1GoogleTest` does not. Pool size is fixed at 4, one per provider, and the log4j2 pattern includes `[%t]` to tell the threads apart.
+- `mvn test` — runs `P1GoogleTest`, `P2AllModelsTest`, `LC1GoogleTest`, `LC2UserMessageTextTest`, `LC3UserMessageTest`, and `LC4SystemAndUserMessagesTest`. Most `LC*` classes are interactive `main()` methods, not tests; and `LC10Embedding` *is* a `@Test` but its class name matches none of Surefire's default includes (`Test*`, `*Test`, `*Tests`, `*TestCase`), which the pom does not override — so it is skipped unless named via `-Dtest=LC10Embedding` or run from the IDE.
+- Parallel execution is enabled but **opt-in**: `src/test/resources/junit-platform.properties` switches the engine on yet leaves `mode.default` and `mode.classes.default` at `same_thread`, so only a class carrying `@Execution(ExecutionMode.CONCURRENT)` fans out. `LC2UserMessageTextTest`, `LC3UserMessageTest`, and `LC4SystemAndUserMessagesTest` carry it; `P1GoogleTest`, `P2AllModelsTest`, and `LC1GoogleTest` do not. Pool size is fixed at 4, one per provider, and the log4j2 pattern includes `[%t]` to tell the threads apart.
 - Loggers come from Lombok's `@Log4j2`, never a hand-written field. Since JDK 23 dropped implicit annotation processing, the pom lists Lombok under the compiler plugin's `<annotationProcessorPaths>` — a new Lombok annotation needs nothing further, but dropping that block silently breaks every `log` reference.
 - `scripts/start-ollama.sh` and `scripts/stop-ollama.sh` start and stop the local Ollama server; the start script also checks that `MISTRAL_AI_MODEL_NAME` is pulled.
 
@@ -60,13 +60,14 @@ Helpers live beside the approach that uses them; only what both need stays in `c
 
 Two kinds, and the distinction matters when running them:
 
-**JUnit `@Test` classes** — `plain/PlainTest`, `LC3UserMessageTest`, `LC4SystemAndUserMessagesTest`, `LC10Embedding`. Only the first three run under a bare `mvn test`; `LC10Embedding` is skipped by Surefire's name filter (see Build & run).
+**JUnit `@Test` classes** — `plain/P1GoogleTest`, `plain/P2AllModelsTest`, `LC1GoogleTest`, `LC2UserMessageTextTest`, `LC3UserMessageTest`, `LC4SystemAndUserMessagesTest`, `LC10Embedding`. All but the last run under a bare `mvn test`; `LC10Embedding` is skipped by Surefire's name filter (see Build & run).
 
 **Interactive `main()` classes** — `LC5Chatting`, `LC6ChattingWithMemory`, `LC7Chatbot`, `LC8ChatbotWithAnnotations`, `LC9ChatbotStreaming`, `LC11CompareEmbeddings`, `LC12EmbeddingStore`. They loop on `IO.readln(COMMAND_PROMPT)` until an empty line. They are `main()` rather than `@Test` deliberately: a test runner gives no console to read from. Don't convert them to tests.
 
 What each one adds:
 
-- `LC3` — one string prompt per provider. `LC4` — `SystemMessage` + `UserMessage` list.
+- `LC1` — one provider (Google), model built inline rather than through `ChatModelFactory`; the framework mirror of `P1GoogleTest`.
+- `LC2` — one string prompt per provider, via `ChatModelFactory`. `LC3` — the same prompt as a `UserMessage`. `LC4` — `SystemMessage` + `UserMessage` list.
 - `LC5` — prompt loop with no memory. `LC6` — `MessageWindowChatMemory`, managed by hand.
 - `LC7` — the same via `AiServices` + a declared interface. `LC8` — `@SystemMessage` / `@UserMessage` / `@V` templating.
 - `LC9` — `TokenStream` streaming with a `CompletableFuture` to await completion.
