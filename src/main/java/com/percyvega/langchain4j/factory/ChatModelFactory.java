@@ -1,23 +1,23 @@
-package com.percyvega.langchain4j;
+package com.percyvega.langchain4j.factory;
 
 import com.percyvega.utils.ApiKeys;
-import dev.langchain4j.model.anthropic.AnthropicStreamingChatModel;
-import dev.langchain4j.model.chat.StreamingChatModel;
-import dev.langchain4j.model.googleai.GoogleAiGeminiStreamingChatModel;
-import dev.langchain4j.model.ollama.OllamaStreamingChatModel;
-import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
+import dev.langchain4j.model.anthropic.AnthropicChatModel;
+import dev.langchain4j.model.chat.ChatModel;
+import dev.langchain4j.model.googleai.GoogleAiGeminiChatModel;
+import dev.langchain4j.model.ollama.OllamaChatModel;
+import dev.langchain4j.model.openai.OpenAiChatModel;
 
 import java.time.Duration;
 
 import static com.percyvega.utils.Constants.*;
 
-public abstract class StreamingChatModelFactory {
+public abstract class ChatModelFactory {
 
-    private StreamingChatModelFactory() {
+    private ChatModelFactory() {
     }
 
-    public static StreamingChatModel getAnthropic() {
-        return AnthropicStreamingChatModel.builder()
+    public static ChatModel getAnthropic() {
+        return AnthropicChatModel.builder()
                 .apiKey(ApiKeys.anthropic())
                 .modelName(ANTHROPIC_MODEL_NAME)
                 .temperature(TEMPERATURE / 2)
@@ -26,8 +26,8 @@ public abstract class StreamingChatModelFactory {
                 .build();
     }
 
-    public static StreamingChatModel getGoogle() {
-        return GoogleAiGeminiStreamingChatModel.builder()
+    public static ChatModel getGoogle() {
+        return GoogleAiGeminiChatModel.builder()
                 .apiKey(ApiKeys.google())
                 .modelName(GOOGLE_AI_MODEL_NAME)
                 .temperature(TEMPERATURE)
@@ -36,8 +36,8 @@ public abstract class StreamingChatModelFactory {
                 .build();
     }
 
-    public static StreamingChatModel getOpenAi() {
-        return OpenAiStreamingChatModel.builder()
+    public static ChatModel getOpenAi() {
+        return OpenAiChatModel.builder()
                 .apiKey(ApiKeys.openAI())
                 .modelName(OPENAI_AI_MODEL_NAME)
                 .temperature(TEMPERATURE)
@@ -46,8 +46,8 @@ public abstract class StreamingChatModelFactory {
                 .build();
     }
 
-    public static StreamingChatModel getOllama() {
-        return OllamaStreamingChatModel.builder()
+    public static ChatModel getOllama() {
+        return OllamaChatModel.builder()
                 .baseUrl("http://localhost:11434")
                 .modelName(MISTRAL_AI_MODEL_NAME)
                 .temperature(TEMPERATURE)

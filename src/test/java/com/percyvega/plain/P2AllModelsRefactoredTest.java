@@ -4,7 +4,6 @@ import com.percyvega.plain.impl.AnthropicHelperImpl;
 import com.percyvega.plain.impl.GoogleHelperImpl;
 import com.percyvega.plain.impl.OllamaHelperImpl;
 import com.percyvega.plain.impl.OpenAiHelperImpl;
-import com.percyvega.plain.util.JsonUtils;
 import org.junit.jupiter.api.Test;
 
 import static com.percyvega.utils.Constants.USER_MESSAGE_TEXT;

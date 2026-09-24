@@ -1,7 +1,5 @@
 package com.percyvega.langchain4j.util;
 
-import lombok.extern.log4j.Log4j2;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
@@ -12,7 +10,6 @@ import java.util.Locale;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-@Log4j2
 public abstract class FileUtils {
 
     // BreakIterator knows that a period is not always a sentence end, unlike splitting on ".".
@@ -47,6 +44,13 @@ public abstract class FileUtils {
 
     public static List<String> getSentences(String fileName) {
         return getSentencesFromText(getContents(fileName));
+    }
+
+    public static List<String> getLines(String fileName) {
+        return getContents(fileName).lines()
+                .map(line -> line.replaceAll("\\s+", " ").trim())
+                .filter(line -> !line.isEmpty())
+                .toList();
     }
 
 }

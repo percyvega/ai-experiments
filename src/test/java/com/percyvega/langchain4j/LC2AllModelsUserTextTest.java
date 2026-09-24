@@ -1,5 +1,6 @@
 package com.percyvega.langchain4j;
 
+import com.percyvega.langchain4j.factory.ChatModelFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;

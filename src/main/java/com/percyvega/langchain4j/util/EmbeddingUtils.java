@@ -1,18 +1,16 @@
 package com.percyvega.langchain4j.util;
 
-import com.percyvega.langchain4j.EmbeddingModelFactory;
+import com.percyvega.langchain4j.factory.EmbeddingModelFactory;
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.output.Response;
-import lombok.extern.log4j.Log4j2;
 import org.jspecify.annotations.NonNull;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-@Log4j2
 public abstract class EmbeddingUtils {
 
     private static final EmbeddingModel EMBEDDING_MODEL = EmbeddingModelFactory.getOpenAi();
@@ -23,7 +21,7 @@ public abstract class EmbeddingUtils {
     // One embedAll() call sends every sentence in a single request, rather than one request per sentence.
     // Duplicates are dropped first, so nothing is paid for twice.
     public static Map<String, Embedding> getEmbeddings(List<String> sentences) {
-        log.info("Embedding {} values...", sentences.size());
+        IO.println("Embedding " + sentences.size() + " values...");
         List<String> distinctSentences = sentences.stream().distinct().toList();
         List<Embedding> vectors = EMBEDDING_MODEL.embedAll(distinctSentences.stream()
                 .map(TextSegment::from)
@@ -33,7 +31,7 @@ public abstract class EmbeddingUtils {
         for (int i = 0; i < distinctSentences.size(); i++) {
             embeddings.put(distinctSentences.get(i), vectors.get(i));
         }
-        log.info("Embedded {} values", embeddings.size());
+        IO.println("Embedded " + embeddings.size() + " values");
         return embeddings;
     }
 

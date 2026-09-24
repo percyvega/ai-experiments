@@ -1,4 +1,4 @@
-package com.percyvega.langchain4j;
+package com.percyvega.langchain4j.factory;
 
 import com.percyvega.utils.ApiKeys;
 import dev.langchain4j.model.embedding.EmbeddingModel;

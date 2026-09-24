@@ -1,5 +1,6 @@
 package com.percyvega.langchain4j;
 
+import com.percyvega.langchain4j.factory.ChatModelFactory;
 import dev.langchain4j.memory.ChatMemory;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatModel;

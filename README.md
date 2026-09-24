@@ -26,7 +26,6 @@ Model names, temperature, max tokens, timeout, and the default prompts all live 
 - Maven 3.9+
 - macOS — API keys are read from the macOS keychain (see below)
 - [Ollama](https://ollama.com/) on port `11434` if you want the local provider — start it with `ollama serve` and pull the model named by `MISTRAL_AI_MODEL_NAME` in `Constants`
-- Lombok supplies the `@Log4j2` loggers. JDK 23 dropped implicit annotation processing, so the pom names Lombok in `<annotationProcessorPaths>`; in an IDE, make sure annotation processing is enabled
 
 ## API keys
 
@@ -69,12 +68,12 @@ Worth knowing: Surefire only picks up classes matching `Test*` / `*Test` / `*Tes
 | `LC8ChatbotWithAnnotations`   | Interactive | `@SystemMessage` / `@UserMessage` / `@V` prompt templating on the interface                      |
 | `LC9ChatbotStreaming`         | Interactive | `StreamingChatModel` + `TokenStream`, printing partial responses as they arrive                  |
 | `LC10EmbeddingTest`          | JUnit       | What an embedding *is* — print the raw vector for one sentence                                  |
-| `LC11CompareEmbeddings`       | Interactive | Hand-rolled retrieval: cosine vs. euclidean similarity over the sentences of a text file          |
+| `LC11CompareEmbeddingAlgorithms` | Interactive | Hand-rolled retrieval: cosine vs. euclidean similarity over the lines of a text file              |
 | `LC12EmbeddingStore`         | Interactive | The same retrieval, but with LangChain4j's `InMemoryEmbeddingStore` and its scoring               |
 
-`LC11` and `LC12` both embed `src/test/resources/introduction-to-java.txt` at startup, then let you ask questions against it and show the closest matches. That file is 150 short Java Q&A pairs, one per line; `FileUtils.getSentences` splits on sentence boundaries, so each question and its answer become separate chunks — which is why a typed question tends to match a stored question almost exactly.
+`LC11` and `LC12` both embed `src/test/resources/introduction-to-java.txt` at startup, then let you ask questions against it and show the closest matches. That file is 150 short Java Q&A pairs, one per line, and `FileUtils.getLines` embeds each line whole, so a question and its answer stay in one chunk and a match carries the answer with it. `FileUtils.getSentences` is the road not taken: `BreakIterator` would split `What is Java?` from its answer, turning 150 lines into 304 chunks, and a typed question would then match a stored question and tell you nothing new.
 
-Parallel execution is enabled but **opt-in**. `src/test/resources/junit-platform.properties` turns the engine on while leaving both default modes at `same_thread`, so only a class annotated `@Execution(ExecutionMode.CONCURRENT)` fans out — currently `LC2AllModelsUserTextTest`, `LC3UserMessageTest`, and `LC4SystemAndUserMessagesTest`, whose four provider methods run across a fixed pool of 4. `P1GoogleTest`, `P2AllModelsRefactoredTest`, and `LC1GoogleUserTextTest` stay sequential. The log pattern includes `[%t]` so you can tell the threads apart.
+Parallel execution is enabled but **opt-in**. `src/test/resources/junit-platform.properties` turns the engine on while leaving both default modes at `same_thread`, so only a class annotated `@Execution(ExecutionMode.CONCURRENT)` fans out — currently `LC2AllModelsUserTextTest`, `LC3UserMessageTest`, and `LC4SystemAndUserMessagesTest`, whose four provider methods run across a fixed pool of 4. `P1GoogleTest`, `P2AllModelsRefactoredTest`, and `LC1GoogleUserTextTest` stay sequential. The concurrent classes print through `IO.println` and tag each line with the provider name themselves, which is what keeps the interleaved output readable.
 
 ## Architecture
 
@@ -88,7 +87,7 @@ The interesting part is the diff between providers: Google nests `contents`/`par
 
 Adding a provider: extend `AbstractModelHelper`, implement the three `protected` methods, expose a `ModelHelper INSTANCE`.
 
-### `langchain4j` — factories
+### `langchain4j.factory` — factories
 
 - `ChatModelFactory` — `getAnthropic()` / `getOpenAi()` / `getGoogle()` / `getOllama()`, each returning a fresh `ChatModel`.
 - `StreamingChatModelFactory` — the same four, returning `StreamingChatModel` (used by `LC9`).
@@ -109,5 +108,5 @@ Each helper sits next to the approach that uses it; `com.percyvega.utils` holds 
 
 `com.percyvega.langchain4j.util` — framework side only:
 
-- `FileUtils` — `getSentences(fileName)`, splitting a classpath resource into sentences with `BreakIterator` rather than on `"."`.
+- `FileUtils` — `getLines(fileName)`, one chunk per line of a classpath resource, which is what `LC11` and `LC12` embed; and `getSentences(fileName)`, splitting the same resource into sentences with `BreakIterator` rather than on `"."`.
 - `EmbeddingUtils` — `getEmbedding` / `getEmbeddings` (one batched `embedAll` call, duplicates dropped first) plus `cosineSimilarity` and `euclideanSimilarity`, each documented with the range it actually lands in.

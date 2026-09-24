@@ -8,8 +8,6 @@ import org.junit.jupiter.api.Test;
 import java.time.Duration;
 
 import static com.percyvega.utils.Constants.*;
-import static com.percyvega.utils.Constants.MAX_TOKENS;
-import static com.percyvega.utils.Constants.TIMEOUT_SECONDS;
 
 class LC1GoogleUserTextTest {
 

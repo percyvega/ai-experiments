@@ -1,5 +1,6 @@
 package com.percyvega.langchain4j;
 
+import com.percyvega.langchain4j.factory.EmbeddingModelFactory;
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.output.Response;
