@@ -47,12 +47,11 @@ There is no `Main`. Every experiment lives under `src/test/java`, and there are 
 **JUnit tests** — run with Maven or from the IDE:
 
 ```sh
-mvn test                        # P1, P2, LC1, LC2, LC3, LC4 — every class whose name ends in Test
+mvn test                        # every class whose name ends in Test: P1, P2, LC1—LC4, LC10
 mvn test -Dtest=LC3UserMessageTest
-mvn test -Dtest=LC10Embedding   # LC10 needs naming explicitly; see below
 ```
 
-One wrinkle: Surefire only picks up classes matching `Test*` / `*Test` / `*Tests` / `*TestCase`, and the pom does not override that. `LC10EmbeddingTest` is a real `@Test` but its name matches none of those, so a bare `mvn test` **silently skips it**. Run it from the IDE, name it with `-Dtest=`, or rename the class if you want it in the default run.
+Worth knowing: Surefire only picks up classes matching `Test*` / `*Test` / `*Tests` / `*TestCase`, and the pom does not override that, so a class joins the default run purely on its name. That is why `LC10EmbeddingTest` ends in `Test` and the interactive classes do not. It also means a bare `mvn test` hits all four providers **and** an OpenAI embedding — every call billed. Name a single class with `-Dtest=` to keep that down.
 
 **Interactive `main()` methods** — these read from the console, which a test runner does not give you, so run them from the IDE (green gutter arrow) rather than through `mvn test`. Enter an empty line to quit.
 
@@ -69,11 +68,9 @@ One wrinkle: Surefire only picks up classes matching `Test*` / `*Test` / `*Tests
 | `LC7Chatbot`                  | Interactive | The same thing via `AiServices` — declare an interface, let LangChain4j wire the memory          |
 | `LC8ChatbotWithAnnotations`   | Interactive | `@SystemMessage` / `@UserMessage` / `@V` prompt templating on the interface                      |
 | `LC9ChatbotStreaming`         | Interactive | `StreamingChatModel` + `TokenStream`, printing partial responses as they arrive                  |
-| `LC10EmbeddingTest`               | JUnit\*     | What an embedding *is* — log the raw vector for one sentence                                     |
+| `LC10EmbeddingTest`          | JUnit       | What an embedding *is* — print the raw vector for one sentence                                  |
 | `LC11CompareEmbeddings`       | Interactive | Hand-rolled retrieval: cosine vs. euclidean similarity over the sentences of a text file          |
 | `LC12EmbeddingStore`         | Interactive | The same retrieval, but with LangChain4j's `InMemoryEmbeddingStore` and its scoring               |
-
-\* `LC10` is a `@Test`, but not one `mvn test` finds on its own — see the naming note above.
 
 `LC11` and `LC12` both embed `src/test/resources/introduction-to-java.txt` at startup, then let you ask questions against it and show the closest matches. That file is 150 short Java Q&A pairs, one per line; `FileUtils.getSentences` splits on sentence boundaries, so each question and its answer become separate chunks — which is why a typed question tends to match a stored question almost exactly.
 
