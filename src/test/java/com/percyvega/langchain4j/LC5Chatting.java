@@ -13,7 +13,7 @@ import static com.percyvega.utils.Constants.SYSTEM_MESSAGE_TEXT;
 
 class LC5Chatting {
 
-    private static final ChatModel CHAT_MODEL = ChatModelFactory.getGoogle();
+    private static final ChatModel CHAT_MODEL = ChatModelFactory.getAnthropic();
     private static final SystemMessage SYSTEM_MESSAGE = new SystemMessage(SYSTEM_MESSAGE_TEXT);
 
     void main() {
@@ -22,7 +22,7 @@ class LC5Chatting {
 
             List<ChatMessage> messages = List.of(SYSTEM_MESSAGE, userMessage);
             ChatResponse chatResponse = CHAT_MODEL.chat(messages);
-            IO.println(chatResponse);
+            IO.println(chatResponse.aiMessage().text());
         }
     }
 }

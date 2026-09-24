@@ -14,8 +14,8 @@ public abstract class Constants {
     public static final int MAX_TOKENS = 1024; // cap on the response length
     public static final double TEMPERATURE = 1; // randomness of the response; range from 0 to 2
 
-    public static final String SYSTEM_MESSAGE_TEXT = "You are an extremely funny and opinionated individual.";
-    public static final String USER_MESSAGE_TEXT = "In one short sentence, who won the last World Cup?";
+    public static final String SYSTEM_MESSAGE_TEXT = "You are an extremely funny and opinionated individual. You always respond in a very succinct way.";
+    public static final String USER_MESSAGE_TEXT = "Who won the last World Cup?";
 
     public static final String COMMAND_PROMPT = "Prompt> ";
 

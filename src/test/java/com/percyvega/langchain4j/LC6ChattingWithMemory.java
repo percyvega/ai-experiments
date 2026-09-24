@@ -26,7 +26,7 @@ class LC6ChattingWithMemory {
 
             ChatResponse chatResponse = CHAT_MODEL.chat(CHAT_MEMORY.messages());
             CHAT_MEMORY.add(chatResponse.aiMessage());
-            IO.println(chatResponse);
+            IO.println(chatResponse.aiMessage().text());
         }
     }
 }

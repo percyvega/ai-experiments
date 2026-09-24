@@ -52,7 +52,7 @@ mvn test -Dtest=LC3UserMessageTest
 mvn test -Dtest=LC10Embedding   # LC10 needs naming explicitly; see below
 ```
 
-One wrinkle: Surefire only picks up classes matching `Test*` / `*Test` / `*Tests` / `*TestCase`, and the pom does not override that. `LC10Embedding` is a real `@Test` but its name matches none of those, so a bare `mvn test` **silently skips it**. Run it from the IDE, name it with `-Dtest=`, or rename the class if you want it in the default run.
+One wrinkle: Surefire only picks up classes matching `Test*` / `*Test` / `*Tests` / `*TestCase`, and the pom does not override that. `LC10EmbeddingTest` is a real `@Test` but its name matches none of those, so a bare `mvn test` **silently skips it**. Run it from the IDE, name it with `-Dtest=`, or rename the class if you want it in the default run.
 
 **Interactive `main()` methods** — these read from the console, which a test runner does not give you, so run them from the IDE (green gutter arrow) rather than through `mvn test`. Enter an empty line to quit.
 
@@ -69,7 +69,7 @@ One wrinkle: Surefire only picks up classes matching `Test*` / `*Test` / `*Tests
 | `LC7Chatbot`                  | Interactive | The same thing via `AiServices` — declare an interface, let LangChain4j wire the memory          |
 | `LC8ChatbotWithAnnotations`   | Interactive | `@SystemMessage` / `@UserMessage` / `@V` prompt templating on the interface                      |
 | `LC9ChatbotStreaming`         | Interactive | `StreamingChatModel` + `TokenStream`, printing partial responses as they arrive                  |
-| `LC10Embedding`               | JUnit\*     | What an embedding *is* — log the raw vector for one sentence                                     |
+| `LC10EmbeddingTest`               | JUnit\*     | What an embedding *is* — log the raw vector for one sentence                                     |
 | `LC11CompareEmbeddings`       | Interactive | Hand-rolled retrieval: cosine vs. euclidean similarity over the sentences of a text file          |
 | `LC12EmbeddingStore`         | Interactive | The same retrieval, but with LangChain4j's `InMemoryEmbeddingStore` and its scoring               |
 

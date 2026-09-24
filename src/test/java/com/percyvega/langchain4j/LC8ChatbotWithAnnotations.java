@@ -20,7 +20,7 @@ class LC8ChatbotWithAnnotations {
 
     public interface MyChatBot {
         @SystemMessage(SYSTEM_MESSAGE_TEXT)
-        @UserMessage("In one short sentence, {{userInput}}")
+        @UserMessage("Count to three and then respond: {{userInput}}")
         ChatResponse sendUserMessage(@V("userInput") String userInput);
     }
 

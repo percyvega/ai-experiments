@@ -5,7 +5,7 @@ import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.output.Response;
 import org.junit.jupiter.api.Test;
 
-class LC10Embedding {
+class LC10EmbeddingTest {
 
     private static final EmbeddingModel EMBEDDING_MODEL = EmbeddingModelFactory.getOpenAi();
 

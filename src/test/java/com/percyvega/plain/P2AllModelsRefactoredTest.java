@@ -33,7 +33,7 @@ class P2AllModelsRefactoredTest {
 
     private void logResponse(ModelHelper modelHelper) {
         String modelResponse = modelHelper.getModelResponse(USER_MESSAGE_TEXT);
-        IO.println(JsonUtils.formatAsJson(modelResponse));
-        //IO.println(modelHelper.extractPromptResponse(modelResponse));
+//        IO.println(JsonUtils.formatAsJson(modelResponse));
+        IO.println(modelHelper.extractPromptResponse(modelResponse));
     }
 }
