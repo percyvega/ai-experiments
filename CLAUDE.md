@@ -19,12 +19,12 @@ shape.
 
 Two kinds, and the distinction matters when running them:
 
-**JUnit `@Test` classes** — `plain/P1GoogleTest`, `plain/P2AllModelsRefactoredTest`, `LC1GoogleUserTextTest`,
-`LC2AllModelsUserTextTest`, `LC3UserMessageTest`, `LC4SystemAndUserMessagesTest`, `LC10EmbeddingTest`. All of them run
+**JUnit `@Test` classes** — `plain/P1GoogleTest`, `plain/P2AllModelsRefactoredTest`, `LC1UserTextTest`,
+`LC2UserTextTests`, `LC3UserMessageTests`, `LC4SystemAndUserMessagesTests`, `LC10EmbeddingTest`. All of them run
 under a bare `mvn test`, since every name ends in `Test` (see Build & run).
 
 **Interactive `main()` classes** — `LC5Chatting`, `LC6ChattingWithMemory`, `LC7Chatbot`, `LC8ChatbotWithAnnotations`,
-`LC9ChatbotStreaming`, `LC11CompareEmbeddingAlgorithms`, `LC12EmbeddingStore`. They loop on `IO.readln(COMMAND_PROMPT)`
+`LC9ChatbotStreaming`, `LC11EmbeddingAlgorithmsCompared`, `LC12EmbeddingStore`. They loop on `IO.readln(COMMAND_PROMPT)`
 until an empty line. They are `main()` rather than `@Test` deliberately: a test runner gives no console to read from.
 Don't convert them to tests.
 

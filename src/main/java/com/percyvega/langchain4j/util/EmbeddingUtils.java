@@ -1,6 +1,6 @@
 package com.percyvega.langchain4j.util;
 
-import com.percyvega.langchain4j.factory.EmbeddingModelFactory;
+import com.percyvega.langchain4j.factory.L10EmbeddingModelFactory;
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.embedding.EmbeddingModel;
@@ -13,12 +13,12 @@ import java.util.Map;
 
 public abstract class EmbeddingUtils {
 
-    private static final EmbeddingModel EMBEDDING_MODEL = EmbeddingModelFactory.getOpenAi();
+    private static final EmbeddingModel EMBEDDING_MODEL = L10EmbeddingModelFactory.getOpenAi();
 
     private EmbeddingUtils() {
     }
 
-    // One embedAll() call sends every sentence in a single request, rather than one request per sentence.
+    // One embedAll() call sends all sentences in a single request
     // Duplicates are dropped first, so nothing is paid for twice.
     public static Map<String, Embedding> getEmbeddings(List<String> sentences) {
         IO.println("Embedding " + sentences.size() + " values...");

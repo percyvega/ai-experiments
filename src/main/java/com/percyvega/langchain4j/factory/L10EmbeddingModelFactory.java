@@ -9,7 +9,10 @@ import java.time.Duration;
 
 import static com.percyvega.utils.Constants.TIMEOUT_SECONDS;
 
-public class EmbeddingModelFactory {
+public abstract class L10EmbeddingModelFactory {
+
+    private L10EmbeddingModelFactory() {
+    }
 
     public static EmbeddingModel getOpenAi() {
         return OpenAiEmbeddingModel.builder()

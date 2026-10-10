@@ -1,6 +1,6 @@
 package com.percyvega.langchain4j;
 
-import com.percyvega.langchain4j.factory.ChatModelFactory;
+import com.percyvega.langchain4j.factory.L2ChatModelFactory;
 import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.data.message.SystemMessage;
 import dev.langchain4j.data.message.UserMessage;
@@ -14,8 +14,8 @@ import static com.percyvega.utils.Constants.SYSTEM_MESSAGE_TEXT;
 
 class LC5Chatting {
 
-    private static final ChatModel CHAT_MODEL = ChatModelFactory.getAnthropic();
-    private static final SystemMessage SYSTEM_MESSAGE = new SystemMessage(SYSTEM_MESSAGE_TEXT);
+    private static final ChatModel CHAT_MODEL = L2ChatModelFactory.getAnthropic();
+    private static final SystemMessage SYSTEM_MESSAGE = SystemMessage.from(SYSTEM_MESSAGE_TEXT);
 
     void main() {
         for (String userInput = IO.readln(COMMAND_PROMPT); !userInput.isEmpty(); userInput = IO.readln(COMMAND_PROMPT)) {

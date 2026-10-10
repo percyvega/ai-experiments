@@ -9,7 +9,7 @@ import java.time.Duration;
 
 import static com.percyvega.utils.Constants.*;
 
-class LC1GoogleUserTextTest {
+class LC1UserTextTest {
 
     @Test
     void google() {

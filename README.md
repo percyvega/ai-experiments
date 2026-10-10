@@ -58,22 +58,22 @@ Worth knowing: Surefire only picks up classes matching `Test*` / `*Test` / `*Tes
 |------------------------------|-------------|-------------------------------------------------------------------------------------------------|
 | `P1GoogleTest`               | JUnit       | One provider, no abstractions: a hand-built `HttpClient` call to Google, printing the raw body    |
 | `P2AllModelsRefactoredTest`            | JUnit       | Each `*HelperImpl.INSTANCE` over plain HTTP; pretty-prints the raw JSON response                  |
-| `LC1GoogleUserTextTest`              | JUnit       | The same first contact through LangChain4j: a `GoogleAiGeminiChatModel` built inline              |
-| `LC2AllModelsUserTextTest`     | JUnit       | The smallest thing that works: one string prompt to each `ChatModel`, via `ChatModelFactory`      |
-| `LC3UserMessageTest`         | JUnit       | The same prompt wrapped in a `UserMessage` instead of passed as a bare string                    |
-| `LC4SystemAndUserMessagesTest`| JUnit       | A `SystemMessage` + `UserMessage` list instead of a bare string                                  |
+| `LC1UserTextTest`              | JUnit       | The same first contact through LangChain4j: a `GoogleAiGeminiChatModel` built inline              |
+| `LC2UserTextTests`     | JUnit       | The smallest thing that works: one string prompt to each `ChatModel`, via `L2ChatModelFactory`      |
+| `LC3UserMessageTests`         | JUnit       | The same prompt wrapped in a `UserMessage` instead of passed as a bare string                    |
+| `LC4SystemAndUserMessagesTests`| JUnit       | A `SystemMessage` + `UserMessage` list instead of a bare string                                  |
 | `LC5Chatting`                | Interactive | A prompt loop — and the demonstration that, with no memory, the model forgets every turn         |
 | `LC6ChattingWithMemory`       | Interactive | `MessageWindowChatMemory` (10 messages), fed and updated by hand                                 |
 | `LC7Chatbot`                  | Interactive | The same thing via `AiServices` — declare an interface, let LangChain4j wire the memory          |
 | `LC8ChatbotWithAnnotations`   | Interactive | `@SystemMessage` / `@UserMessage` / `@V` prompt templating on the interface                      |
 | `LC9ChatbotStreaming`         | Interactive | `StreamingChatModel` + `TokenStream`, printing partial responses as they arrive                  |
 | `LC10EmbeddingTest`          | JUnit       | What an embedding *is* — print the raw vector for one sentence                                  |
-| `LC11CompareEmbeddingAlgorithms` | Interactive | Hand-rolled retrieval: cosine vs. euclidean similarity over the lines of a text file              |
+| `LC11EmbeddingAlgorithmsCompared` | Interactive | Hand-rolled retrieval: cosine vs. euclidean similarity over the lines of a text file              |
 | `LC12EmbeddingStore`         | Interactive | The same retrieval, but with LangChain4j's `InMemoryEmbeddingStore` and its scoring               |
 
 `LC11` and `LC12` both embed `src/test/resources/introduction-to-java.txt` at startup, then let you ask questions against it and show the closest matches. That file is 150 short Java Q&A pairs, one per line, and `FileUtils.getLines` embeds each line whole, so a question and its answer stay in one chunk and a match carries the answer with it. `FileUtils.getSentences` is the road not taken: `BreakIterator` would split `What is Java?` from its answer, turning 150 lines into 304 chunks, and a typed question would then match a stored question and tell you nothing new.
 
-Parallel execution is enabled but **opt-in**. `src/test/resources/junit-platform.properties` turns the engine on while leaving both default modes at `same_thread`, so only a class annotated `@Execution(ExecutionMode.CONCURRENT)` fans out — currently `LC2AllModelsUserTextTest`, `LC3UserMessageTest`, and `LC4SystemAndUserMessagesTest`, whose four provider methods run across a fixed pool of 4. `P1GoogleTest`, `P2AllModelsRefactoredTest`, and `LC1GoogleUserTextTest` stay sequential. The concurrent classes print through `IO.println` and tag each line with the provider name themselves, which is what keeps the interleaved output readable.
+Parallel execution is enabled but **opt-in**. `src/test/resources/junit-platform.properties` turns the engine on while leaving both default modes at `same_thread`, so only a class annotated `@Execution(ExecutionMode.CONCURRENT)` fans out — currently `LC2UserTextTests`, `LC3UserMessageTests`, and `LC4SystemAndUserMessagesTests`, whose four provider methods run across a fixed pool of 4. `P1GoogleTest`, `P2AllModelsRefactoredTest`, and `LC1UserTextTest` stay sequential. The concurrent classes print through `IO.println` and tag each line with the provider name themselves, which is what keeps the interleaved output readable.
 
 ## Architecture
 
@@ -89,9 +89,9 @@ Adding a provider: extend `AbstractModelHelper`, implement the three `protected`
 
 ### `langchain4j.factory` — factories
 
-- `ChatModelFactory` — `getAnthropic()` / `getOpenAi()` / `getGoogle()` / `getOllama()`, each returning a fresh `ChatModel`.
-- `StreamingChatModelFactory` — the same four, returning `StreamingChatModel` (used by `LC9`).
-- `EmbeddingModelFactory` — `getOpenAi()`, returning an `EmbeddingModel`.
+- `L2ChatModelFactory` — `getAnthropic()` / `getOpenAi()` / `getGoogle()` / `getOllama()`, each returning a fresh `ChatModel`.
+- `L9StreamingChatModelFactory` — the same four, returning `StreamingChatModel` (used by `LC9`).
+- `L10EmbeddingModelFactory` — `getOpenAi()`, returning an `EmbeddingModel`.
 
 ### Utilities
 

@@ -22,33 +22,32 @@ class LC12EmbeddingStore {
         embedAndStoreFileLines();
 
         for (String userInput = IO.readln(COMMAND_PROMPT); !userInput.isEmpty(); userInput = IO.readln(COMMAND_PROMPT)) {
-            IO.println("Similarity to \"" + userInput + "\", from most to least similar:");
 
-            Embedding questionEmbedding = EmbeddingUtils.getEmbedding(userInput);
+            Embedding inputEmbedding = EmbeddingUtils.getEmbedding(userInput);
 
+            IO.println("Searching 3 most similar values to \"" + userInput + "\"");
             // Scores are (cosine + 1) / 2, so even unrelated text sits near 0.75.
             EmbeddingSearchRequest embeddingSearchRequest = EmbeddingSearchRequest.builder()
-                    .queryEmbedding(questionEmbedding)
+                    .queryEmbedding(inputEmbedding)
                     .maxResults(3) // default is 3
                     .minScore(0.75)
                     .build();
-
             EmbeddingSearchResult<TextSegment> embeddingSearchResult = embeddingStore.search(embeddingSearchRequest);
+
             IO.println("LANGCHAIN4J SCORE | QUESTION AND ANSWER");
-            embeddingSearchResult.matches()
-                    .forEach(match -> IO.println(String.format("           %6.4f | %s", match.score(), match.embedded().text())));
+            embeddingSearchResult.matches().forEach(embeddingMatch ->
+                    IO.println(String.format("           %6.4f | %s", embeddingMatch.score(), embeddingMatch.embedded().text())));
         }
     }
 
     private static void embedAndStoreFileLines() {
-        IO.println("Embedding and storing lines...");
+        // A line is a question plus its answer, and that pair is the unit worth retrieving.
         List<String> lines = FileUtils.getLines(FILE_NAME);
         EmbeddingUtils.getEmbeddings(lines)
-                .forEach((key, embedding) -> {
-                    TextSegment textSegment = TextSegment.from(key);
-                    embeddingStore.add(embedding, textSegment);
+                .forEach((k, v) -> {
+                    TextSegment textSegment = TextSegment.from(k);
+                    embeddingStore.add(v, textSegment);
                 });
-        IO.println("Lines embedded and stored.");
     }
 
 }

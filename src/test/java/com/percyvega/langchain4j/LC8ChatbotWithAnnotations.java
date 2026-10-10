@@ -1,6 +1,6 @@
 package com.percyvega.langchain4j;
 
-import com.percyvega.langchain4j.factory.ChatModelFactory;
+import com.percyvega.langchain4j.factory.L2ChatModelFactory;
 import dev.langchain4j.memory.ChatMemory;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatModel;
@@ -15,7 +15,7 @@ import static com.percyvega.utils.Constants.SYSTEM_MESSAGE_TEXT;
 
 class LC8ChatbotWithAnnotations {
 
-    private static final ChatModel CHAT_MODEL = ChatModelFactory.getAnthropic();
+    private static final ChatModel CHAT_MODEL = L2ChatModelFactory.getAnthropic();
 
     private final ChatMemory CHAT_MEMORY = MessageWindowChatMemory.withMaxMessages(10);
 
