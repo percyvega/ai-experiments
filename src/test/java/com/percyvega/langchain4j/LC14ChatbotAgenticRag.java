@@ -31,7 +31,7 @@ class LC14ChatbotAgenticRag {
 
     private static final ChatModel CHAT_MODEL = ModelFactory.getAnthropicChatModel();
 
-    private final ChatMemory CHAT_MEMORY = MessageWindowChatMemory.withMaxMessages(10);
+    private static final ChatMemory CHAT_MEMORY = MessageWindowChatMemory.withMaxMessages(10);
 
     // The model only sees the @Tool and @P descriptions, so they are written for it, not for us.
     static class JavaNoteTools {

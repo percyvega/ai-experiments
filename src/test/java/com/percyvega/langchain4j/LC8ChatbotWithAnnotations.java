@@ -17,8 +17,7 @@ import static com.percyvega.utils.Constants.SYSTEM_MESSAGE_TEXT;
 class LC8ChatbotWithAnnotations {
 
     private static final ChatModel CHAT_MODEL = ModelFactory.getAnthropicChatModel();
-
-    private final ChatMemory CHAT_MEMORY = MessageWindowChatMemory.withMaxMessages(10);
+    private static final ChatMemory CHAT_MEMORY = MessageWindowChatMemory.withMaxMessages(10);
 
     private interface MyChatBot {
         @SystemMessage(SYSTEM_MESSAGE_TEXT)

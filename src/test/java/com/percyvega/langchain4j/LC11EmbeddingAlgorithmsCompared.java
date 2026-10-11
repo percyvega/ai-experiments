@@ -19,9 +19,7 @@ import static com.percyvega.langchain4j.util.EmbeddingUtils.euclideanSimilarity;
 class LC11EmbeddingAlgorithmsCompared {
 
     private static final EmbeddingModel EMBEDDING_MODEL = ModelFactory.getOpenAiEmbeddingModel();
-
     private static final String FILE_NAME = "/introduction-to-java.txt";
-
     private static final String COMMAND_PROMPT = "\nSemantic similarity search. Write something about Java> ";
 
     private record Comparison(String line, float cosine, float euclidean) {

@@ -15,7 +15,6 @@ import static com.percyvega.utils.Constants.COMMAND_PROMPT;
 class LC9ChatbotStreaming {
 
     private static final StreamingChatModel CHAT_MODEL = ModelFactory.getAnthropicStreamingChatModel();
-
     private static final ChatMemory CHAT_MEMORY = MessageWindowChatMemory.withMaxMessages(10);
 
     private interface MyChatBot {

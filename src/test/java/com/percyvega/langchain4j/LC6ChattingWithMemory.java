@@ -17,8 +17,7 @@ class LC6ChattingWithMemory {
 
     private static final ChatModel CHAT_MODEL = ModelFactory.getAnthropicChatModel();
     private static final SystemMessage SYSTEM_MESSAGE = SystemMessage.from(SYSTEM_MESSAGE_TEXT);
-
-    private final ChatMemory CHAT_MEMORY = MessageWindowChatMemory.withMaxMessages(10);
+    private static final ChatMemory CHAT_MEMORY = MessageWindowChatMemory.withMaxMessages(10);
 
     void main() {
         CHAT_MEMORY.add(SYSTEM_MESSAGE);
