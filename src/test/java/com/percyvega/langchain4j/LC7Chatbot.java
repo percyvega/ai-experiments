@@ -1,6 +1,6 @@
 package com.percyvega.langchain4j;
 
-import com.percyvega.langchain4j.factory.L2ChatModelFactory;
+import com.percyvega.langchain4j.factory.ModelFactory;
 import dev.langchain4j.data.message.SystemMessage;
 import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.memory.ChatMemory;
@@ -12,14 +12,17 @@ import dev.langchain4j.service.AiServices;
 import static com.percyvega.utils.Constants.COMMAND_PROMPT;
 import static com.percyvega.utils.Constants.SYSTEM_MESSAGE_TEXT;
 
+// LC7 — the same memory through AiServices: declare an interface, and LangChain4j implements it,
+// storing each message and reply in the memory for you.
 class LC7Chatbot {
 
-    private static final ChatModel CHAT_MODEL = L2ChatModelFactory.getAnthropic();
+    private static final ChatModel CHAT_MODEL = ModelFactory.getAnthropicChatModel();
+
     private static final SystemMessage SYSTEM_MESSAGE = SystemMessage.from(SYSTEM_MESSAGE_TEXT);
 
     private final ChatMemory CHAT_MEMORY = MessageWindowChatMemory.withMaxMessages(10);
 
-    public interface MyChatBot {
+    private interface MyChatBot {
         ChatResponse sendUserMessage(UserMessage userMessage);
     }
 

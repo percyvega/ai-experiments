@@ -1,7 +1,6 @@
 package com.percyvega.langchain4j;
 
-import com.percyvega.langchain4j.factory.L10EmbeddingModelFactory;
-import com.percyvega.langchain4j.factory.L2ChatModelFactory;
+import com.percyvega.langchain4j.factory.ModelFactory;
 import com.percyvega.langchain4j.util.EmbeddingUtils;
 import com.percyvega.langchain4j.util.FileUtils;
 import dev.langchain4j.data.message.UserMessage;
@@ -16,29 +15,37 @@ import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
 
 import java.util.List;
 
+// LC13 — LangChain4j searches with your exact words on every message, before the model sees it, and appends the matches to the prompt.
+// The default template says "Answer using the following information", not "only", so the model freely adds what it already knows.
 class LC13EmbeddingStoreContentRetriever {
 
-    private static final EmbeddingModel EMBEDDING_MODEL = L10EmbeddingModelFactory.getOpenAi();
+    private static final EmbeddingModel EMBEDDING_MODEL = ModelFactory.getOpenAiEmbeddingModel();
 
-    public static final String FILE_NAME = "/introduction-to-java.txt";
+    private static final String FILE_NAME = "/introduction-to-java.txt";
 
-    private static final EmbeddingStore<TextSegment> embeddingStore = new InMemoryEmbeddingStore<>();
-    public static final String COMMAND_PROMPT = "\nSemantic similarity search. Write something about Java> ";
+    private static final String COMMAND_PROMPT = "\nSemantic similarity search. Write something about Java> ";
+
+    private static final EmbeddingStore<TextSegment> EMBEDDING_STORE = new InMemoryEmbeddingStore<>();
+
+    static {
+        // A line is a question plus its answer, and that pair is the unit worth retrieving.
+        List<String> lines = FileUtils.getLines(FILE_NAME);
+        EmbeddingUtils.getEmbeddings(EMBEDDING_MODEL, lines)
+                .forEach((line, embedding) -> EMBEDDING_STORE.add(embedding, TextSegment.from(line)));
+    }
 
     public interface MyChatBot {
         ChatResponse sendUserMessage(UserMessage userMessage);
     }
 
     void main() {
-        embedAndStoreFileLines();
-
         ContentRetriever contentRetriever = EmbeddingStoreContentRetriever.builder()
                 .embeddingModel(EMBEDDING_MODEL)
-                .embeddingStore(embeddingStore)
+                .embeddingStore(EMBEDDING_STORE)
                 .maxResults(3)
                 .build();
         MyChatBot myChatBot = AiServices.builder(MyChatBot.class)
-                .chatModel(L2ChatModelFactory.getGoogle())
+                .chatModel(ModelFactory.getGoogleChatModel())
                 .contentRetriever(contentRetriever)
                 .build();
 
@@ -46,16 +53,6 @@ class LC13EmbeddingStoreContentRetriever {
             ChatResponse chatResponse = myChatBot.sendUserMessage(UserMessage.from(userInput));
             IO.println(chatResponse.aiMessage().text());
         }
-    }
-
-    private static void embedAndStoreFileLines() {
-        // A line is a question plus its answer, and that pair is the unit worth retrieving.
-        List<String> lines = FileUtils.getLines(FILE_NAME);
-        EmbeddingUtils.getEmbeddings(lines)
-                .forEach((k, v) -> {
-                    TextSegment textSegment = TextSegment.from(k);
-                    embeddingStore.add(v, textSegment);
-                });
     }
 
 }

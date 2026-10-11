@@ -1,11 +1,8 @@
 package com.percyvega.langchain4j.util;
 
-import com.percyvega.langchain4j.factory.L10EmbeddingModelFactory;
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.embedding.EmbeddingModel;
-import dev.langchain4j.model.output.Response;
-import org.jspecify.annotations.NonNull;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -13,17 +10,15 @@ import java.util.Map;
 
 public abstract class EmbeddingUtils {
 
-    private static final EmbeddingModel EMBEDDING_MODEL = L10EmbeddingModelFactory.getOpenAi();
-
     private EmbeddingUtils() {
     }
 
     // One embedAll() call sends all sentences in a single request
     // Duplicates are dropped first, so nothing is paid for twice.
-    public static Map<String, Embedding> getEmbeddings(List<String> sentences) {
+    public static Map<String, Embedding> getEmbeddings(EmbeddingModel embeddingModel, List<String> sentences) {
         IO.println("Embedding " + sentences.size() + " values...");
         List<String> distinctSentences = sentences.stream().distinct().toList();
-        List<Embedding> vectors = EMBEDDING_MODEL.embedAll(distinctSentences.stream()
+        List<Embedding> vectors = embeddingModel.embedAll(distinctSentences.stream()
                 .map(TextSegment::from)
                 .toList()).content();
 
@@ -33,11 +28,6 @@ public abstract class EmbeddingUtils {
         }
         IO.println("Embedded " + embeddings.size() + " values");
         return embeddings;
-    }
-
-    public static @NonNull Embedding getEmbedding(String input) {
-        Response<Embedding> response = EMBEDDING_MODEL.embed(input);
-        return response.content();
     }
 
     // Euclidean asks "are these vectors in the same place?"

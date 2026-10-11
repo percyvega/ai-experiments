@@ -11,22 +11,20 @@ under `com.percyvega`:
 - `langchain4j` — same providers via the [LangChain4j](https://docs.langchain4j.dev/) framework, extended into chat
   memory, AI Services, streaming, and embeddings.
 
-There is no `Main`; experiments are driven from `src/test/java/...`. The `langchain4j` experiments are numbered `LC1`…
-`LC12` and build on each other in order — when adding one, continue the numbering and keep the "one new idea per class"
+There is no `Main`; experiments are driven from `src/test/java/...`. The `langchain4j` experiments are numbered `LC#`
+and build on each other in order — when adding one, continue the numbering and keep the "one new idea per class"
 shape.
 
 ## Experiments
 
 Two kinds, and the distinction matters when running them:
 
-**JUnit `@Test` classes** — `plain/P1GoogleTest`, `plain/P2AllModelsRefactoredTest`, `LC1UserTextTest`,
-`LC2UserTextTests`, `LC3UserMessageTests`, `LC4SystemAndUserMessagesTests`, `LC10EmbeddingTest`. All of them run
-under a bare `mvn test`, since every name ends in `Test` (see Build & run).
+**JUnit `@Test` classes** — All of them run under a bare `mvn test`, since every name ends in `Test` or `Tests`, both of
+which Surefire includes by default.
 
-**Interactive `main()` classes** — `LC5Chatting`, `LC6ChattingWithMemory`, `LC7Chatbot`, `LC8ChatbotWithAnnotations`,
-`LC9ChatbotStreaming`, `LC11EmbeddingAlgorithmsCompared`, `LC12EmbeddingStore`. They loop on `IO.readln(COMMAND_PROMPT)`
-until an empty line. They are `main()` rather than `@Test` deliberately: a test runner gives no console to read from.
-Don't convert them to tests.
+**Interactive `main()` classes** — They loop on `IO.readln(COMMAND_PROMPT)` until an empty line. They are `main()`
+rather than `@Test`
+deliberately: a test runner gives no console to read from. Don't convert them to tests.
 
 ## API keys
 

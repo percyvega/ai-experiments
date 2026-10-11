@@ -1,6 +1,6 @@
 package com.percyvega.langchain4j;
 
-import com.percyvega.langchain4j.factory.L2ChatModelFactory;
+import com.percyvega.langchain4j.factory.ModelFactory;
 import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.model.chat.response.ChatResponse;
 import org.junit.jupiter.api.Test;
@@ -9,6 +9,8 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static com.percyvega.utils.Constants.USER_MESSAGE_TEXT;
 
+// LC3 — the prompt wrapped in a UserMessage instead of passed as a bare string,
+// so chat() returns a whole ChatResponse instead of just the text.
 @Execution(ExecutionMode.CONCURRENT)
 class LC3UserMessageTests {
 
@@ -16,22 +18,22 @@ class LC3UserMessageTests {
 
     @Test
     void anthropic() {
-        printResponse("Anthropic", L2ChatModelFactory.getAnthropic().chat(USER_MESSAGE));
+        printResponse("Anthropic", ModelFactory.getAnthropicChatModel().chat(USER_MESSAGE));
     }
 
     @Test
     void google() {
-        printResponse("Google", L2ChatModelFactory.getGoogle().chat(USER_MESSAGE));
+        printResponse("Google", ModelFactory.getGoogleChatModel().chat(USER_MESSAGE));
     }
 
     @Test
     void openAi() {
-        printResponse("OpenAi", L2ChatModelFactory.getOpenAi().chat(USER_MESSAGE));
+        printResponse("OpenAi", ModelFactory.getOpenAiChatModel().chat(USER_MESSAGE));
     }
 
     @Test
     void ollama() {
-        printResponse("Ollama", L2ChatModelFactory.getOllama().chat(USER_MESSAGE));
+        printResponse("Ollama", ModelFactory.getOllamaChatModel().chat(USER_MESSAGE));
     }
 
     private void printResponse(String provider, ChatResponse chatResponse) {

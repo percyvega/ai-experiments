@@ -1,33 +1,34 @@
 package com.percyvega.langchain4j;
 
-import com.percyvega.langchain4j.factory.L2ChatModelFactory;
+import com.percyvega.langchain4j.factory.ModelFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static com.percyvega.utils.Constants.USER_MESSAGE_TEXT;
 
+// LC2 — the same string prompt sent to every provider, each ChatModel now built by ModelFactory.
 @Execution(ExecutionMode.CONCURRENT)
 class LC2UserTextTests {
 
     @Test
     void anthropic() {
-        printResponse("Anthropic", L2ChatModelFactory.getAnthropic().chat(USER_MESSAGE_TEXT));
+        printResponse("Anthropic", ModelFactory.getAnthropicChatModel().chat(USER_MESSAGE_TEXT));
     }
 
     @Test
     void google() {
-        printResponse("Google", L2ChatModelFactory.getGoogle().chat(USER_MESSAGE_TEXT));
+        printResponse("Google", ModelFactory.getGoogleChatModel().chat(USER_MESSAGE_TEXT));
     }
 
     @Test
     void openAi() {
-        printResponse("OpenAi", L2ChatModelFactory.getOpenAi().chat(USER_MESSAGE_TEXT));
+        printResponse("OpenAi", ModelFactory.getOpenAiChatModel().chat(USER_MESSAGE_TEXT));
     }
 
     @Test
     void ollama() {
-        printResponse("Ollama", L2ChatModelFactory.getOllama().chat(USER_MESSAGE_TEXT));
+        printResponse("Ollama", ModelFactory.getOllamaChatModel().chat(USER_MESSAGE_TEXT));
     }
 
     private void printResponse(String provider, String response) {

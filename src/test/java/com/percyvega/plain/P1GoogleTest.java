@@ -37,7 +37,7 @@ class P1GoogleTest {
 
     private HttpRequest getHttpRequest() {
         return HttpRequest.newBuilder()
-                .uri(URI.create("https://generativelanguage.googleapis.com/v1beta/models/" + GOOGLE_AI_MODEL_NAME + ":generateContent"))
+                .uri(URI.create("https://generativelanguage.googleapis.com/v1beta/models/" + GOOGLE_CHAT_MODEL_NAME + ":generateContent"))
                 .header("Content-Type", "application/json")
                 .header("x-goog-api-key", ApiKeys.google())
                 .POST(HttpRequest.BodyPublishers.ofString(getRequestPayload()))

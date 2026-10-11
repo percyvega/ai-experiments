@@ -44,7 +44,7 @@ public final class OpenAiHelperImpl extends AbstractModelHelper {
                         }
                     ]
                 }
-                """.formatted(OPENAI_AI_MODEL_NAME, MAX_TOKENS, TEMPERATURE, SYSTEM_MESSAGE_TEXT, prompt);
+                """.formatted(OPENAI_CHAT_MODEL_NAME, MAX_TOKENS, TEMPERATURE, SYSTEM_MESSAGE_TEXT, prompt);
     }
 
     @Override

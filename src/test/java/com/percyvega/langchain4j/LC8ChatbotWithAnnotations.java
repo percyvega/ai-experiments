@@ -1,6 +1,6 @@
 package com.percyvega.langchain4j;
 
-import com.percyvega.langchain4j.factory.L2ChatModelFactory;
+import com.percyvega.langchain4j.factory.ModelFactory;
 import dev.langchain4j.memory.ChatMemory;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatModel;
@@ -13,13 +13,14 @@ import dev.langchain4j.service.V;
 import static com.percyvega.utils.Constants.COMMAND_PROMPT;
 import static com.percyvega.utils.Constants.SYSTEM_MESSAGE_TEXT;
 
+// LC8 — the prompts move onto the interface: @SystemMessage and @UserMessage templates, with @V filling in {{userInput}}.
 class LC8ChatbotWithAnnotations {
 
-    private static final ChatModel CHAT_MODEL = L2ChatModelFactory.getAnthropic();
+    private static final ChatModel CHAT_MODEL = ModelFactory.getAnthropicChatModel();
 
     private final ChatMemory CHAT_MEMORY = MessageWindowChatMemory.withMaxMessages(10);
 
-    public interface MyChatBot {
+    private interface MyChatBot {
         @SystemMessage(SYSTEM_MESSAGE_TEXT)
         @UserMessage("Count to three and then respond: {{userInput}}")
         ChatResponse sendUserMessage(@V("userInput") String userInput);

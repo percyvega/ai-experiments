@@ -42,7 +42,7 @@ public final class AnthropicHelperImpl extends AbstractModelHelper {
                         }
                     ]
                 }
-                """.formatted(ANTHROPIC_MODEL_NAME, MAX_TOKENS, TEMPERATURE / 2, SYSTEM_MESSAGE_TEXT, prompt);
+                """.formatted(ANTHROPIC_CHAT_MODEL_NAME, MAX_TOKENS, TEMPERATURE / 2, SYSTEM_MESSAGE_TEXT, prompt);
     }
 
     @Override

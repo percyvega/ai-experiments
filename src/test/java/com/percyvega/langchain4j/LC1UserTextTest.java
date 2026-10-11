@@ -9,6 +9,7 @@ import java.time.Duration;
 
 import static com.percyvega.utils.Constants.*;
 
+// LC1 — first contact through LangChain4j: a GoogleAiGeminiChatModel built inline and sent one plain string prompt.
 class LC1UserTextTest {
 
     @Test
@@ -19,7 +20,7 @@ class LC1UserTextTest {
     public static ChatModel getGoogleChatModel() {
         return GoogleAiGeminiChatModel.builder()
                 .apiKey(ApiKeys.google())
-                .modelName(GOOGLE_AI_MODEL_NAME)
+                .modelName(GOOGLE_CHAT_MODEL_NAME)
                 .temperature(TEMPERATURE)
                 .maxOutputTokens(MAX_TOKENS)
                 .timeout(Duration.ofSeconds(TIMEOUT_SECONDS))

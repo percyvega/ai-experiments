@@ -1,6 +1,6 @@
 package com.percyvega.langchain4j;
 
-import com.percyvega.langchain4j.factory.L2ChatModelFactory;
+import com.percyvega.langchain4j.factory.ModelFactory;
 import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.data.message.SystemMessage;
 import dev.langchain4j.data.message.UserMessage;
@@ -14,6 +14,7 @@ import java.util.List;
 import static com.percyvega.utils.Constants.SYSTEM_MESSAGE_TEXT;
 import static com.percyvega.utils.Constants.USER_MESSAGE_TEXT;
 
+// LC4 — a SystemMessage sent ahead of the UserMessage, so the model gets instructions on how to answer.
 @Execution(ExecutionMode.CONCURRENT)
 class LC4SystemAndUserMessagesTests {
 
@@ -23,22 +24,22 @@ class LC4SystemAndUserMessagesTests {
 
     @Test
     void anthropic() {
-        printResponse("Anthropic", L2ChatModelFactory.getAnthropic().chat(CHAT_MESSAGES));
+        printResponse("Anthropic", ModelFactory.getAnthropicChatModel().chat(CHAT_MESSAGES));
     }
 
     @Test
     void google() {
-        printResponse("Google", L2ChatModelFactory.getGoogle().chat(CHAT_MESSAGES));
+        printResponse("Google", ModelFactory.getGoogleChatModel().chat(CHAT_MESSAGES));
     }
 
     @Test
     void openAi() {
-        printResponse("OpenAi", L2ChatModelFactory.getOpenAi().chat(CHAT_MESSAGES));
+        printResponse("OpenAi", ModelFactory.getOpenAiChatModel().chat(CHAT_MESSAGES));
     }
 
     @Test
     void ollama() {
-        printResponse("Ollama", L2ChatModelFactory.getOllama().chat(CHAT_MESSAGES));
+        printResponse("Ollama", ModelFactory.getOllamaChatModel().chat(CHAT_MESSAGES));
     }
 
     private void printResponse(String provider, ChatResponse chatResponse) {

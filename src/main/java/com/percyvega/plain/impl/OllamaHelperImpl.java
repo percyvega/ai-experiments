@@ -42,7 +42,7 @@ public final class OllamaHelperImpl extends AbstractModelHelper {
                         }
                     ]
                 }
-                """.formatted(MISTRAL_AI_MODEL_NAME, MAX_TOKENS, TEMPERATURE, SYSTEM_MESSAGE_TEXT, prompt);
+                """.formatted(MISTRAL_CHAT_MODEL_NAME, MAX_TOKENS, TEMPERATURE, SYSTEM_MESSAGE_TEXT, prompt);
     }
 
     @Override

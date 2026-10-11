@@ -1,6 +1,6 @@
 package com.percyvega.langchain4j;
 
-import com.percyvega.langchain4j.factory.L2ChatModelFactory;
+import com.percyvega.langchain4j.factory.ModelFactory;
 import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.data.message.SystemMessage;
 import dev.langchain4j.data.message.UserMessage;
@@ -12,9 +12,10 @@ import java.util.List;
 import static com.percyvega.utils.Constants.COMMAND_PROMPT;
 import static com.percyvega.utils.Constants.SYSTEM_MESSAGE_TEXT;
 
+// LC5 — a prompt loop with no memory: each message goes out alone, so the model forgets every earlier turn.
 class LC5Chatting {
 
-    private static final ChatModel CHAT_MODEL = L2ChatModelFactory.getAnthropic();
+    private static final ChatModel CHAT_MODEL = ModelFactory.getAnthropicChatModel();
     private static final SystemMessage SYSTEM_MESSAGE = SystemMessage.from(SYSTEM_MESSAGE_TEXT);
 
     void main() {

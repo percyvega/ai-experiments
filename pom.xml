@@ -12,6 +12,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>25</maven.compiler.release>
+        <!-- Keeps parameter names in the bytecode, so LangChain4j tools show the LLM "query" instead of "arg0". -->
+        <maven.compiler.parameters>true</maven.compiler.parameters>
         <lombok.version>1.18.48</lombok.version>
     </properties>
 
@@ -36,7 +38,7 @@
             <dependency>
                 <groupId>dev.langchain4j</groupId>
                 <artifactId>langchain4j-bom</artifactId>
-                <version>1.20.0</version>
+                <version>1.22.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
