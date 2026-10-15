@@ -33,7 +33,6 @@ class LC14ChatbotAgenticRag {
 
     private static final ChatMemory CHAT_MEMORY = MessageWindowChatMemory.withMaxMessages(10);
 
-    // The model only sees the @Tool and @P descriptions, so they are written for it, not for us.
     static class JavaNoteTools {
         private static final EmbeddingModel EMBEDDING_MODEL = ModelFactory.getOpenAiEmbeddingModel();
 
@@ -48,6 +47,7 @@ class LC14ChatbotAgenticRag {
                     .forEach((line, embedding) -> EMBEDDING_STORE.add(embedding, TextSegment.from(line)));
         }
 
+        // The @Tool and @P descriptions are written for the Model to decide when/how to use this, not for humans. This covers what the tool does and returns.
         @Tool("Searches the Java notes by meaning and returns the most similar question-and-answer lines")
         String searchJavaNotes(@P("A question about a single Java topic, phrased like 'What is a record?'") String searchQuery) {
             IO.println("  [tool] searchJavaNotes(\"" + searchQuery + "\")");
@@ -71,6 +71,7 @@ class LC14ChatbotAgenticRag {
     }
 
     public interface MyChatBot {
+        // Tells the model when to call the tool.
         @SystemMessage("""
                 You answer questions about Java using only the Java notes, which you search with the searchJavaNotes tool.
                 Search once per topic in the question, and search again with different words if the results miss.
@@ -83,9 +84,9 @@ class LC14ChatbotAgenticRag {
                 .chatModel(CHAT_MODEL)
                 .chatMemory(CHAT_MEMORY)
                 .tools(new JavaNoteTools())
-                // Bad arguments go back to the model so it can retry; a failing tool fails the call
-                // instead of sending its exception message, written for developers, to the model.
+                // Both handlers reverse the sync defaults (bad arguments fail the call; a tool's exception message goes to the model). Bad arguments: the error text goes back to the model so it can fix them and retry.
                 .toolArgumentsErrorHandler(ToolArgumentsErrorHandler.sendExceptionMessageToLlm())
+                // The tool throws: the call fails, unless the exception implements ToolErrorVisibleToLlm, in which case its messageForLlm() goes to the model instead.
                 .toolExecutionErrorHandler(ToolExecutionErrorHandler.failInvocationUnlessVisibleToLlm())
                 .build();
 

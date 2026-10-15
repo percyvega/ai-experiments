@@ -5,6 +5,8 @@ import com.percyvega.langchain4j.util.EmbeddingUtils;
 import com.percyvega.langchain4j.util.FileUtils;
 import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.data.segment.TextSegment;
+import dev.langchain4j.memory.ChatMemory;
+import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.response.ChatResponse;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
@@ -17,9 +19,10 @@ import java.util.List;
 
 // LC13 — LangChain4j searches with your exact words on every message, before the model sees it, and appends the matches to the prompt.
 // The default template says "Answer using the following information", not "only", so the model freely adds what it already knows.
-class LC13EmbeddingStoreContentRetriever {
+class LC13EmbeddingStoreChatbot {
 
     private static final EmbeddingModel EMBEDDING_MODEL = ModelFactory.getOpenAiEmbeddingModel();
+    private static final ChatMemory CHAT_MEMORY = MessageWindowChatMemory.withMaxMessages(10);
     private static final String FILE_NAME = "/introduction-to-java.txt";
     private static final String COMMAND_PROMPT = "\nSemantic similarity search. Write something about Java> ";
 
@@ -44,6 +47,7 @@ class LC13EmbeddingStoreContentRetriever {
                 .build();
         MyChatBot myChatBot = AiServices.builder(MyChatBot.class)
                 .chatModel(ModelFactory.getGoogleChatModel())
+                .chatMemory(CHAT_MEMORY)
                 .contentRetriever(contentRetriever)
                 .build();
 

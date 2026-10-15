@@ -7,12 +7,19 @@ import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 public abstract class FileUtils {
 
-    // BreakIterator knows that a period is not always a sentence end, unlike splitting on ".".
+    private static final Pattern WHITESPACES = Pattern.compile("\\s+");
+
+    private FileUtils() {
+    }
+
+    // Gets all the sentences from a paragraph or a long line.
+    // BreakIterator knows that a period is not always a sentence end, unlike splitting on "."
     private static List<String> getSentencesFromText(String text) {
         BreakIterator breakIterator = BreakIterator.getSentenceInstance(Locale.ENGLISH);
         breakIterator.setText(text);
@@ -21,7 +28,7 @@ public abstract class FileUtils {
         int start = breakIterator.first();
         for (int end = breakIterator.next(); end != BreakIterator.DONE; start = end, end = breakIterator.next()) {
             // Paragraphs are hard-wrapped, so a sentence carries the line breaks it spans.
-            String sentence = text.substring(start, end).replaceAll("\\s+", " ").trim();
+            String sentence = WHITESPACES.matcher(text.substring(start, end)).replaceAll(" ").trim();
             if (!sentence.isEmpty()) {
                 sentences.add(sentence);
             }
@@ -48,7 +55,7 @@ public abstract class FileUtils {
 
     public static List<String> getLines(String fileName) {
         return getContents(fileName).lines()
-                .map(line -> line.replaceAll("\\s+", " ").trim())
+                .map(line -> WHITESPACES.matcher(line).replaceAll(" ").trim())
                 .filter(line -> !line.isEmpty())
                 .toList();
     }

@@ -35,12 +35,12 @@ class LC12EmbeddingStore {
 
             Embedding inputEmbedding = EMBEDDING_MODEL.embed(userInput).content();
 
-            IO.println("Searching 3 most similar values to \"" + userInput + "\"");
-            // Scores are (cosine + 1) / 2, so even unrelated text sits near 0.75.
+            IO.println("Searching the 3 most semantically similar values to \"" + userInput + "\"");
+            // Scores are (cosine + 1) / 2, so even unrelated text sits near 0.68
             EmbeddingSearchRequest embeddingSearchRequest = EmbeddingSearchRequest.builder()
                     .queryEmbedding(inputEmbedding)
                     .maxResults(3) // default is 3
-                    .minScore(0.75)
+                    .minScore(0.68)
                     .build();
             EmbeddingSearchResult<TextSegment> embeddingSearchResult = EMBEDDING_STORE.search(embeddingSearchRequest);
 

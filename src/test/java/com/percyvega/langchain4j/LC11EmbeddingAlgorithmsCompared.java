@@ -38,7 +38,7 @@ class LC11EmbeddingAlgorithmsCompared {
 
             float[] inputVector = EMBEDDING_MODEL.embed(userInput).content().vector();
 
-            IO.println("Searching 3 most similar values to \"" + userInput + "\"");
+            IO.println("Searching the 3 most semantically similar values to \"" + userInput + "\"");
             // compare userInput vector with each calculated vector
             List<Comparison> comparisons = LINE_EMBEDDING_MAP.entrySet().stream()
                     .map(e -> {
