@@ -6,7 +6,7 @@ import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.output.Response;
 import org.junit.jupiter.api.Test;
 
-// LC10 — what an embedding is: one sentence turned into a vector of numbers, printed raw.
+// What an embedding is: one sentence turned into a vector of numbers, printed raw.
 class LC10EmbeddingTest {
 
     private static final EmbeddingModel EMBEDDING_MODEL = ModelFactory.getOpenAiEmbeddingModel();

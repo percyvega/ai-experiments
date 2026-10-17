@@ -14,7 +14,7 @@ import java.util.Map;
 import static com.percyvega.langchain4j.util.EmbeddingUtils.cosineSimilarity;
 import static com.percyvega.langchain4j.util.EmbeddingUtils.euclideanSimilarity;
 
-// LC11 — hand-rolled retrieval: every line of a file is embedded, then ranked against your input
+// Hand-rolled retrieval: every line of a file is embedded, then ranked against your input
 // by cosine and euclidean similarity. It stops at the matches.
 class LC11EmbeddingAlgorithmsCompared {
 
@@ -28,7 +28,6 @@ class LC11EmbeddingAlgorithmsCompared {
     private static final Map<String, Embedding> LINE_EMBEDDING_MAP = new HashMap<>();
 
     static {
-        // A line is a question plus its answer, and that pair is the unit worth retrieving.
         List<String> lines = FileUtils.getLines(FILE_NAME);
         LINE_EMBEDDING_MAP.putAll(EmbeddingUtils.getEmbeddings(EMBEDDING_MODEL, lines));
     }

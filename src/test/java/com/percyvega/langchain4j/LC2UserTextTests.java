@@ -7,7 +7,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static com.percyvega.utils.Constants.USER_MESSAGE_TEXT;
 
-// LC2 — the same string prompt sent to every provider, each ChatModel now built by ModelFactory.
+// The same string prompt sent to every provider, each ChatModel now built by ModelFactory.
 @Execution(ExecutionMode.CONCURRENT)
 class LC2UserTextTests {
 

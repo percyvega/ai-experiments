@@ -9,7 +9,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static com.percyvega.utils.Constants.USER_MESSAGE_TEXT;
 
-// LC3 — the prompt wrapped in a UserMessage instead of passed as a bare string,
+// The prompt wrapped in a UserMessage instead of passed as a bare string,
 // so chat() returns a whole ChatResponse instead of just the text.
 @Execution(ExecutionMode.CONCURRENT)
 class LC3UserMessageTests {

@@ -12,7 +12,7 @@ import dev.langchain4j.service.AiServices;
 import static com.percyvega.utils.Constants.COMMAND_PROMPT;
 import static com.percyvega.utils.Constants.SYSTEM_MESSAGE_TEXT;
 
-// LC7 — the same memory through AiServices: declare an interface, and LangChain4j implements it,
+// The same memory through AiServices: declare an interface, and LangChain4j implements it,
 // storing each message and reply in the memory for you.
 class LC7Chatbot {
 

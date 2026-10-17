@@ -24,10 +24,10 @@ import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
 import java.util.List;
 import java.util.stream.Collectors;
 
-// LC14 — the model gets searchJavaNotes(query) as a tool and writes its own queries.
+// The model gets searchJavaNotes(query) as a tool and writes its own queries.
 // It may split one question into several searches, retry with different words when a search misses, or skip searching entirely.
 // Each call prints a [tool] line so you can watch it decide. The system message tells it to answer only from the notes.
-class LC14ChatbotAgenticRag {
+class LC15ChatbotAgenticRag {
 
     private static final ChatModel CHAT_MODEL = ModelFactory.getAnthropicChatModel();
 
@@ -41,7 +41,6 @@ class LC14ChatbotAgenticRag {
         private static final EmbeddingStore<TextSegment> EMBEDDING_STORE = new InMemoryEmbeddingStore<>();
 
         static {
-            // A line is a question plus its answer, and that pair is the unit worth retrieving.
             List<String> lines = FileUtils.getLines(FILE_NAME);
             EmbeddingUtils.getEmbeddings(EMBEDDING_MODEL, lines)
                     .forEach((line, embedding) -> EMBEDDING_STORE.add(embedding, TextSegment.from(line)));
@@ -51,8 +50,6 @@ class LC14ChatbotAgenticRag {
         @Tool("Searches the Java notes by meaning and returns the most similar question-and-answer lines")
         String searchJavaNotes(@P("A question about a single Java topic, phrased like 'What is a record?'") String searchQuery) {
             IO.println("  [tool] searchJavaNotes(\"" + searchQuery + "\")");
-            // Unrelated lines score about 0.60 and right answers 0.70 or more, even for a one-word query.
-            // Questions score higher (0.80+), because every stored line starts with one.
             EmbeddingSearchRequest embeddingSearchRequest = EmbeddingSearchRequest.builder()
                     .queryEmbedding(EMBEDDING_MODEL.embed(searchQuery).content())
                     .maxResults(3)

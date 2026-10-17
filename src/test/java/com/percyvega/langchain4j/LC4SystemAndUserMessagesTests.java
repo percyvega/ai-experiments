@@ -14,7 +14,7 @@ import java.util.List;
 import static com.percyvega.utils.Constants.SYSTEM_MESSAGE_TEXT;
 import static com.percyvega.utils.Constants.USER_MESSAGE_TEXT;
 
-// LC4 — a SystemMessage sent ahead of the UserMessage, so the model gets instructions on how to answer.
+// A SystemMessage sent ahead of the UserMessage, so the model gets instructions on how to answer.
 @Execution(ExecutionMode.CONCURRENT)
 class LC4SystemAndUserMessagesTests {
 

@@ -9,7 +9,7 @@ import java.time.Duration;
 
 import static com.percyvega.utils.Constants.*;
 
-// LC1 — first contact through LangChain4j: a GoogleAiGeminiChatModel built inline and sent one plain string prompt.
+// First contact through LangChain4j: a GoogleAiGeminiChatModel built inline and sent one plain string prompt.
 class LC1UserTextTest {
 
     @Test

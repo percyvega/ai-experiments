@@ -13,7 +13,7 @@ import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
 
 import java.util.List;
 
-// LC12 — the same retrieval, with LangChain4j's InMemoryEmbeddingStore doing the search and the scoring.
+// The same retrieval, with LangChain4j's InMemoryEmbeddingStore doing the search and the scoring.
 // It stops at the matches.
 class LC12EmbeddingStore {
 
@@ -24,7 +24,6 @@ class LC12EmbeddingStore {
     private static final EmbeddingStore<TextSegment> EMBEDDING_STORE = new InMemoryEmbeddingStore<>();
 
     static {
-        // A line is a question plus its answer, and that pair is the unit worth retrieving.
         List<String> lines = FileUtils.getLines(FILE_NAME);
         EmbeddingUtils.getEmbeddings(EMBEDDING_MODEL, lines)
                 .forEach((line, embedding) -> EMBEDDING_STORE.add(embedding, TextSegment.from(line)));

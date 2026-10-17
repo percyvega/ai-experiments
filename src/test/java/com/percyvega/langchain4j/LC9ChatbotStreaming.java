@@ -11,7 +11,7 @@ import java.util.concurrent.CompletableFuture;
 
 import static com.percyvega.utils.Constants.COMMAND_PROMPT;
 
-// LC9 — StreamingChatModel and TokenStream: the reply is printed piece by piece as it arrives instead of all at once.
+// StreamingChatModel and TokenStream: the reply is printed piece by piece as it arrives instead of all at once.
 class LC9ChatbotStreaming {
 
     private static final StreamingChatModel CHAT_MODEL = ModelFactory.getAnthropicStreamingChatModel();

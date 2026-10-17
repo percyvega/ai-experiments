@@ -13,7 +13,7 @@ import dev.langchain4j.service.V;
 import static com.percyvega.utils.Constants.COMMAND_PROMPT;
 import static com.percyvega.utils.Constants.SYSTEM_MESSAGE_TEXT;
 
-// LC8 — the prompts move onto the interface: @SystemMessage and @UserMessage templates, with @V filling in {{userInput}}.
+// The prompts move onto the interface: @SystemMessage and @UserMessage templates, with @V filling in {{userInput}}.
 class LC8ChatbotWithAnnotations {
 
     private static final ChatModel CHAT_MODEL = ModelFactory.getAnthropicChatModel();

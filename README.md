@@ -5,7 +5,7 @@ A personal sandbox for calling LLM providers from Java, in two flavors:
 - **`plain`** — direct HTTP via `java.net.http.HttpClient` and Jackson, no SDK. Shows what the providers' wire formats actually look like.
 - **`langchain4j`** — the same providers through [LangChain4j](https://docs.langchain4j.dev/), then further into memory, AI Services, streaming, embeddings, and RAG.
 
-The `langchain4j` experiments are numbered `LC1` … `LC14` and are meant to be read in order — each one adds a single idea to the one before it.
+The `langchain4j` experiments are numbered `LC1+` and are meant to be read in order — each one adds a single idea to the one before it.
 
 ## Providers
 
@@ -87,5 +87,5 @@ Each helper sits next to the approach that uses it; `com.percyvega.utils` holds 
 
 `com.percyvega.langchain4j.util` — framework side only:
 
-- `FileUtils` — `getLines(fileName)`, one chunk per line of a classpath resource, which is what `LC11` through `LC14` embed; and `getSentences(fileName)`, splitting the same resource into sentences with `BreakIterator` rather than on `"."`.
+- `FileUtils` — `getLines(fileName)`, one chunk per line of a classpath resource, which is what `LC11+` embed; and `getSentences(fileName)`, splitting the same resource into sentences with `BreakIterator` rather than on `"."`.
 - `EmbeddingUtils` — `getEmbedding` / `getEmbeddings` (one batched `embedAll` call, duplicates dropped first) plus `cosineSimilarity` and `euclideanSimilarity`, each documented with the range it actually lands in.

@@ -17,7 +17,7 @@ import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
 
 import java.util.List;
 
-// LC13 — LangChain4j searches with your exact words on every message, before the model sees it, and appends the matches to the prompt.
+// LangChain4j searches with your exact words on every message, before the model sees it, and appends the matches to the prompt.
 // The default template says "Answer using the following information", not "only", so the model freely adds what it already knows.
 class LC13EmbeddingStoreChatbot {
 
@@ -29,7 +29,6 @@ class LC13EmbeddingStoreChatbot {
     private static final EmbeddingStore<TextSegment> EMBEDDING_STORE = new InMemoryEmbeddingStore<>();
 
     static {
-        // A line is a question plus its answer, and that pair is the unit worth retrieving.
         List<String> lines = FileUtils.getLines(FILE_NAME);
         EmbeddingUtils.getEmbeddings(EMBEDDING_MODEL, lines)
                 .forEach((line, embedding) -> EMBEDDING_STORE.add(embedding, TextSegment.from(line)));

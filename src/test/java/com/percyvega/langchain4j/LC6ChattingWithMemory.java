@@ -11,7 +11,7 @@ import dev.langchain4j.model.chat.response.ChatResponse;
 import static com.percyvega.utils.Constants.COMMAND_PROMPT;
 import static com.percyvega.utils.Constants.SYSTEM_MESSAGE_TEXT;
 
-// LC6 — a MessageWindowChatMemory that keeps the last 10 messages, fed by hand with each question and reply
+// A MessageWindowChatMemory that keeps the last 10 messages, fed by hand with each question and reply
 // and sent in full on every turn, so the model remembers the conversation.
 class LC6ChattingWithMemory {
 
